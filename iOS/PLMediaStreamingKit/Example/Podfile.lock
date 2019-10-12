@@ -1,0 +1,93 @@
+PODS:
+  - AFNetworking (3.2.1):
+    - AFNetworking/NSURLSession (= 3.2.1)
+    - AFNetworking/Reachability (= 3.2.1)
+    - AFNetworking/Security (= 3.2.1)
+    - AFNetworking/Serialization (= 3.2.1)
+    - AFNetworking/UIKit (= 3.2.1)
+  - AFNetworking/NSURLSession (3.2.1):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (3.2.1)
+  - AFNetworking/Security (3.2.1)
+  - AFNetworking/Serialization (3.2.1)
+  - AFNetworking/UIKit (3.2.1):
+    - AFNetworking/NSURLSession
+  - BlocksKit (2.2.5):
+    - BlocksKit/All (= 2.2.5)
+  - BlocksKit/All (2.2.5):
+    - BlocksKit/Core
+    - BlocksKit/DynamicDelegate
+    - BlocksKit/MessageUI
+    - BlocksKit/UIKit
+  - BlocksKit/Core (2.2.5)
+  - BlocksKit/DynamicDelegate (2.2.5)
+  - BlocksKit/MessageUI (2.2.5):
+    - BlocksKit/Core
+    - BlocksKit/DynamicDelegate
+  - BlocksKit/UIKit (2.2.5):
+    - BlocksKit/Core
+    - BlocksKit/DynamicDelegate
+  - Bugly (2.5.0)
+  - Crashlytics (3.13.1):
+    - Fabric (~> 1.10.1)
+  - DGActivityIndicatorView (2.1.1)
+  - Fabric (1.10.1)
+  - KVOController (1.2.0)
+  - Mantle (2.1.0):
+    - Mantle/extobjc (= 2.1.0)
+  - Mantle/extobjc (2.1.0)
+  - Masonry (1.1.0)
+  - PLMediaStreamingKit (2.3.4):
+    - PLMediaStreamingKit/iphoneos (= 2.3.4)
+  - PLMediaStreamingKit/iphoneos (2.3.4)
+  - SDWebImage (5.1.1):
+    - SDWebImage/Core (= 5.1.1)
+  - SDWebImage/Core (5.1.1)
+  - SSZipArchive (2.2.2)
+  - Toast (4.0.0)
+  - WeiboSDK (3.1.3)
+  - ZLPhotoBrowser (3.1.0):
+    - SDWebImage (~> 5.1.0)
+
+DEPENDENCIES:
+  - AFNetworking (~> 3.0)
+  - BlocksKit
+  - Bugly (= 2.5.0)
+  - Crashlytics
+  - DGActivityIndicatorView
+  - Fabric
+  - KVOController (= 1.2.0)
+  - Mantle (= 2.1.0)
+  - Masonry
+  - PLMediaStreamingKit (from `../`)
+  - SSZipArchive
+  - Toast (~> 4.0.0)
+  - WeiboSDK
+  - ZLPhotoBrowser
+
+EXTERNAL SOURCES:
+  PLMediaStreamingKit:
+    :path: ../
+
+SPEC CHECKSUMS:
+  AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
+  BlocksKit: 7f422b971407001178d181a43b99014ea2591fe6
+  Bugly: 3ca9f255c01025582df26f9222893b383c7e4b4e
+  Crashlytics: 5aa8e90dcbf2f34898b4f5a0037787531246cca0
+  DGActivityIndicatorView: ff2c76073d79692f724863c8dd38685866a03cb6
+  Fabric: f6f21452846788bb44595d73e9909d79d328e617
+  KVOController: d72ace34afea42468329623b3379ab3cd1d286b6
+  Mantle: 2fa750afa478cd625a94230fbf1c13462f29395b
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+  PLMediaStreamingKit: 48a16270731a0a3fec8712c7dffe1e5701e6bcec
+  SDWebImage: 96d7f03415ccb28d299d765f93557ff8a617abd8
+  SSZipArchive: fa16b8cc4cdeceb698e5e5d9f67e9558532fbf23
+  Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
+  WeiboSDK: acb067053668102cf07d01aa7604350162c2e466
+  ZLPhotoBrowser: f6c9fe04c47580c5da4373347a903c3d78336f56
+
+PODFILE CHECKSUM: 5bedcf061d96a1cc07fec5fd58dcea341e073a46
+
+COCOAPODS: 1.3.1

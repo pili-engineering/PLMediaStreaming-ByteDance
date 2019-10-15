@@ -1,0 +1,414 @@
+<resources>
+    <string name="app_name">PLDroidMediaStreamingDemo</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="start">Start</string>
+
+    <string name="hw_codec_camera_streaming_txt">HW Codec Camera Streaming</string>
+    <string name="sw_codec_camera_streaming_txt">SW Codec Camera Streaming</string>
+    <string name="pure_audio_streaming_txt">Audio Streaming</string>
+    <string name="screen_recorder_streaming_txt">Screen Recorder Streaming</string>
+    <string name="ext_cap_streaming_txt">Ext Capture Streaming</string>
+
+    <string name="string_state_ready">READY</string>
+    <string name="string_state_preparing">PREPARING</string>
+    <string name="string_state_connecting">CONNECTING</string>
+    <string name="string_state_streaming">STREAMING</string>
+    <string name="string_state_netblocking">NETBLOCKING, STOPPING</string>
+    <string name="string_state_con_timeout">CONNECTION TIMEOUT</string>
+    <string name="title_activity_audio_streaming">AudioStreamingActivity</string>
+
+    <string name="flash_light_on">ON</string>
+    <string name="flash_light_off">OFF</string>
+
+    <string name="cd_et_input_url">cd_et_input_url</string>
+    <string name="cd_btn_hw_codec">cd_btn_hw_codec</string>
+    <string name="cd_btn_sw_codec">cd_btn_sw_codec</string>
+    <string name="cd_btn_pure_audio">cd_btn_pure_audio</string>
+    <string name="cd_tv_version_info">cd_tv_version_info</string>
+    <string name="cd_tv_log_info">cd_tv_log_info</string>
+    <string name="cd_et_input_method">cd_et_input_method</string>
+    <string name="cd_btn_camera_switcher">cd_btn_camera_switcher</string>
+    <string name="cd_tv_stream_status">cd_tv_stream_status</string>
+    <string name="cd_btn_torch">cd_btn_torch</string>
+    <string name="cd_btn_capture">cd_btn_capture</string>
+    <string name="cd_btn_orientation">cd_btn_orientation</string>
+    <string name="cd_btn_mute">cd_btn_mute</string>
+    <string name="cd_btn_fb">cd_btn_fb</string>
+    <string name="cd_tv_streaming_state_hint">cd_tv_streaming_state_hint</string>
+    <string name="cd_shutter_button">cd_shutter_button</string>
+    <string name="cd_btn_screen_recorder">cd_btn_screen_recorder</string>
+    <string name="cd_btn_ext_cap">cd_btn_ext_cap</string>
+    <string name="cd_preview_mirror">cd_preview_mirror</string>
+    <string name="cd_encoding_mirror">cd_encoding_mirror</string>
+
+
+
+    <string name="setting_hand">Hand Landmark and Gestures </string>
+
+    <string name="setting_hand_desc">43 kinds static gestures and 2 kinds dynamic gestures</string>
+
+    <string name="setting_beauty">Realtime Face Beautification</string>
+    <string name="setting_face_lift">Face Lifting</string>
+    <string name="setting_big_eye">Big Eye</string>
+    <string name="setting_skin_grinding">Skin Grinding</string>
+    <string name="setting_skin_whitening">Skin Whitening</string>
+    <string name="setting_skin_sharpen">Skin Sharpening</string>
+
+    <string name="setting_filter_intensity">Filter Intensity</string>
+
+    <string name="setting_makeup">Face Makeup</string>
+    <string name="setting_skeleton">Body Landmark Tracking</string>
+    <string name="setting_skeleton_desc">real-time detection of human 17 key points</string>
+
+    <string name="setting_face">Face 106 Landmark</string>
+    <string name="setting_face_desc">face 106 landmark tracking and actions detection</string>
+
+    <string name="setting_face_extra">Face 280 Landmark</string>
+    <string name="setting_face_extra_desc">+dense keypoints eyeball center and countour tracking</string>
+    <string name="seeting_face_attribute">Facial Attributes</string>
+    <string name="seeting_face_attribute_desc">facial attributes and expressions detection </string>
+
+    <string name="setting_human_dist">Distance estimate</string>
+    <string name="setting_human_dist_desc">estimate the distance between human face to camera</string>
+
+    <string name="tab_human_dist">Distance estimate</string>
+
+    <string name="dist">Distance(m):</string>
+
+
+
+    <string name="invalid_license">Invalid Lincense</string>
+    <string name="init_face_failed">Face Initialization Failed</string>
+    <string name="init_hand_failed">Hand Initialization Failed</string>
+    <string name="init_effect_failed">EffectRender Initialization Failed</string>
+    <string name="portaitmatting">Human Body Cutout</string>
+    <string name="portaitmattingdesc">Human Body Cutout Algorithm</string>
+    <string name="setting_hair">Hair Cutout</string>
+    <string name="setting_hair_desc">Hair Cutout Algorithm</string>
+    <string name="sticker_qrcode">Scan qrcode to experience Creator</string>
+    <string name="download_fail">Download Failure</string>
+    <string name="download_success">Download successful</string>
+    <string name="file_check_fail">File check failed</string>
+    <string name="unip_fail">Decompression failed</string>
+    <string name="license_check_fail">License check failed</string>
+    <string name="sticker_load_fail">Sticker load failed</string>
+    <string name="sticker_load_success">Sticker load successful</string>
+    <string name="invalid_license_file">Invalid license file</string>
+    <string name="download_sticker">Downloading sticker</string>
+    <string name="sticker_parse_fail">Sticker ID parsing failed</string>
+    <string name="network_error">Network connection failed, please check network settings</string>
+
+    <string name="tab_face">Face</string>
+    <string name="tab_face_attr">Face Attr</string>
+    <string name="tab_hand">Hand</string>
+    <string name="tab_body">Body</string>
+    <string name="tab_face_beautification">Beautification</string>
+    <string name="tab_filter">Filter</string>
+    <string name="tab_face_makeup">Makeup</string>
+    <string name="tab_face_beauty_reshape">reshape</string>
+    <string name="tab_face_beauty_body">body</string>
+
+    <string name="setting_red_lip">Lip Stick</string>
+    <string name="setting_blush">Blush</string>
+
+    <string name="tab_sticker">Sticker</string>
+    <string name="tab_segmentation">Segmentation</string>
+    <string name="tab_body_cutout">Body Cutout</string>
+    <string name="tab_hair_cutout">Hair Cutout</string>
+    <string name="tab_face_verify">Face Verify</string>
+
+
+    <string name="filter_normal">original</string>
+    <string name="filter_chalk">chalk</string>
+    <string name="filter_cream">cream</string>
+    <string name="filter_oxgen">oxgen</string>
+    <string name="filter_campan">campa</string>
+    <string name="filter_lolita">lolita</string>
+    <string name="filter_mitao">peach</string>
+    <string name="filter_makalong">macaron</string>
+    <string name="filter_paomo">bubble</string>
+    <string name="filter_yinhua">cherry</string>
+    <string name="filter_musi">mousse</string>
+    <string name="filter_wuyu">story</string>
+    <string name="filter_beihaidao">Hokkaido</string>
+    <string name="filter_riza">misce</string>
+    <string name="filter_xiyatu">Seattle</string>
+    <string name="filter_jingmi">quiet</string>
+    <string name="filter_jiaopian">film</string>
+    <string name="filter_nuanyang">sun</string>
+    <string name="filter_jiuri">old time</string>
+    <string name="filter_hongchun">red lips</string>
+    <string name="filter_julandiao">oriange bue</string>
+    <string name="filter_tuise">fade</string>
+    <string name="filter_heibai">grey</string>
+
+    <string name="sticker_yumao">feather</string>
+    <string name="sticker_xiyue">moon</string>
+    <string name="sticker_xiyue_tip">Blinking</string>
+    <string name="sticker_mojie">devil</string>
+    <string name="sticker_shenlong">dragon</string>
+    <string name="sticker_huaxianzi">flower</string>
+    <string name="sticker_huaxianzi_tip">Blink</string>
+    <string name="sticker_caixiaomao">cat</string>
+    <string name="sticker_caixiaomao_tip">Blink</string>
+    <string name="sticker_xiaoemo">small devil</string>
+    <string name="sticker_shengrikuaile">birthday</string>
+    <string name="sticker_shengrikuaile_tip">Open mouth</string>
+    <string name="sticker_maomao">maomao</string>
+    <string name="sticker_wumeiniang">wuzetian</string>
+    <string name="sticker_wumeiniang_tip">Invite your friends to play together</string>
+    <string name="sticker_liuxing">meteor</string>
+    <string name="sticker_liuxing_tip">nod</string>
+    <string name="sticker_yinghua">cherry</string>
+    <string name="sticker_tujie">rabbit</string>
+    <string name="sticker_dielianjin">butterfly</string>
+    <string name="sticker_dielianjin_tip">Contrast and blink~</string>
+    <string name="sticker_dielianfen">butterfly</string>
+    <string name="sticker_dielianfen_tip">Contrast and blink~</string>
+    <string name="sticker_huahai">flower sea</string>
+    <string name="sticker_huahai_tip">Blink</string>
+    <string name="sticker_miluzhuang">elk</string>
+    <string name="sticker_nyekong">fireworks</string>
+    <string name="sticker_yekong_tip">nod</string>
+    <string name="sticker_haiwang">neptune</string>
+    <string name="sticker_haiwang_tip">nod</string>
+    <string name="sticker_tanchizhu">pig</string>
+    <string name="sticker_tanchizhu_tip">Open mouth~</string>
+    <string name="sticker_xinxing">heart</string>
+    <string name="sticker_xinxing_tip">Blink~</string>
+    <string name="sticker_milutoushi">elk</string>
+    <string name="sticker_nvshen">mask</string>
+    <string name="sticker_chelianmao">cat</string>
+    <string name="sticker_chuipaopao">bubbles</string>
+    <string name="sticker_mengmengxiaolu">fawn</string>
+    <string name="sticker_mengmengxiaolu_tip">Blink</string>
+    <string name="sticker_duiwohaqi">breathing</string>
+    <string name="sticker_duiwohaqi_tip">Breathing to the phone</string>
+    <string name="sticker_tuaixin">love</string>
+    <string name="sticker_tuaixin_tip">Open mouth</string>
+    <string name="sticker_xiaohuanggou">yellow dog</string>
+    <string name="sticker_woshishui">who am i</string>
+    <string name="sticker_woshishui_tip">Invite your friends to play together</string>
+    <string name="sticker_nvjingling">female elf</string>
+    <string name="sticker_nvjingling_tip">Blink</string>
+    <string name="sticker_sanzhilanmao">three cat</string>
+    <string name="sticker_huaxin">draw heart</string>
+    <string name="sticker_yanzhisaomiao">beauty scan</string>
+    <string name="sticker_yanzhisaomiao_tip">Invite your friends to play together</string>
+    <string name="sticker_tiezhi">sticker</string>
+    <string name="sticker_caomei">strawberry</string>
+    <string name="sticker_xinhua">happy</string>
+    <string name="sticker_xinhua_tip">Eyebrow</string>
+    <string name="sticker_wodeshenghao">height</string>
+    <string name="sticker_wodeshengao_tip">Blink</string>
+    <string name="sticker_wpikaqiu">pikachu</string>
+    <string name="sticker_pikaqiu_tip">Open Hand</string>
+    <string name="sticker_pangliang">big face</string>
+    <string name="sticker_panglian_tip">Invite your friends to play together</string>
+    <string name="sticker_pikaqiu2">pikachu</string>
+    <string name="sticker_pikaqiu2_tip">Blink~</string>
+    <string name="sticker_bixintu">rabbit</string>
+    <string name="sticker_bixintu_tip">Air kiss~</string>
+    <string name="sticker_xiaohuahua">little flower</string>
+    <string name="sticker_xiaohuahua_tip">Blink</string>
+    <string name="sticker_lentu">rabbit baby</string>
+    <string name="sticker_lengtu_tip">Blink</string>
+    <string name="sticker_ya">ah</string>
+    <string name="sticker_yanjingli">in eye</string>
+    <string name="sticker_yanjingli_tip">Blink</string>
+    <string name="sticker_rain">rain</string>
+    <string name="sticker_change_face">turn face</string>
+    <string name="sticker_change_face_tip">Tilting the head and starting to change face～</string>
+    <string name="sticker_wudan">Wudan</string>
+    <string name="sticker_qingyi">Qingyi</string>
+    <string name="sticker_hualian">Hualian</string>
+    <string name="sticker_chou">Choujue</string>
+    <string name="sticker_laosheng">Laosheng</string>
+    <string name="sticker_line_dance">Line dance</string>
+    <string name="sticker_happy_birth_day">happy birth</string>
+    <string name="sticker_lovely_cat">lovely cat</string>
+    <string name="sticker_happy_cat">happy cat</string>
+    <string name="sticker_simple_rabbit_ear">rabbit</string>
+
+
+    <string name="closing_eye">closing eyes</string>
+    <string name="open_mouth">open mouth</string>
+    <string name="shake_head">shaking head</string>
+    <string name="nod">nod</string>
+    <string name="raise_eyebrow">raising eyebrow</string>
+    <string name="pout">pout</string>
+
+    <string name="total_verify">total verify</string>
+    <string name="current_face">current face</string>
+    <string name="yaw">yaw</string>
+    <string name="roll">roll</string>
+    <string name="pitch">pitch</string>
+    <string name="detect_count">total detect count</string>
+    <string name="face_count">total face count</string>
+    <string name="age">age</string>
+    <string name="happiness">happiness</string>
+    <string name="beauty">beauty</string>
+    <string name="gender">gender</string>
+    <string name="race">race</string>
+    <string name="gesture">gesture:</string>
+    <string name="punching">fist bump</string>
+    <string name="applaud">applaud</string>
+    <!--race -->
+    <string name="yellow">yellow</string>
+    <string name="white">white</string>
+    <string name="black">black</string>
+    <string name="brown">brown</string>
+
+    <!-- expression-->
+    <string name="expression">expression</string>
+    <string name="anger">anger</string>
+    <string name="nausea">nausea</string>
+    <string name="fear">fear</string>
+    <string name="happy">happy</string>
+    <string name="sad">sad</string>
+    <string name="surprise">surprise</string>
+    <string name="poker_face">poker_face</string>
+
+    <string name="male">male</string>
+    <string name="female">female</string>
+
+    <!-- welcome-->
+    <string name="resource_prepare">Reource preparation</string>
+    <string name="resource_ready">Resource ready</string>
+    <string name="choose">Choose One Picture </string>
+
+    <string name="setting_face_verify">Face Verify</string>
+    <string name="similarity">similarity</string>
+    <string name="cost">cost</string>
+    <string name="similarity_default">similarity:0.00</string>
+
+    <string name="cost_default">cost:0ms</string>
+    <string name="logo">ByteDance AI</string>
+    <string name="product">Byte Effect SDK</string>
+    <string name="no_face_detected">no face detected</string>
+    <string name="face_more_than_one">faces deteced more than one</string>
+    <string name="sticker_without_license">license for sticker is missing</string>
+    <string name="open_face106_fist">Please open Face 106 Landmark first</string>
+    <string name="ablum_not_supported">Ablum not supported</string>
+
+
+    <string name="face_106_title">face 106</string>
+    <string name="face_106_desc">106 point</string>
+    <string name="face_280_desc">eyeball lips</string>
+    <string name="face_280_title">face 280</string>
+    <string name="face_attr_desc">expression</string>
+    <string name="face_attr_title">face property</string>
+
+    <string name="hand_detect_desc">45 gestures</string>
+    <string name="hand_detect_title">gesture</string>
+
+    <string name="skeleton_detect_title">skeleton</string>
+    <string name="skeleton_detect_desc">human key</string>
+
+    <string name="segment_segment_title">body</string>
+    <string name="segment_segment_desc">segmentation</string>
+    <string name="segment_hair_title">hair</string>
+    <string name="segment_hair_desc">parser</string>
+
+    <string name="face_verify_none_title">none</string>
+    <string name="face_verify_none_desc">close</string>
+    <string name="face_verify_upload_title">upload</string>
+    <string name="face_verify_upload_desc">verifying photo</string>
+
+    <!--美颜功能-->
+    <string name="close">close</string>
+    <string name="beauty_face_smooth">smooth</string>
+    <string name="beauty_face_whiten">whitening</string>
+    <string name="beauty_face_sharpen">sharpen</string>
+
+    <!--美形功能-->
+    <string name="beauty_reshape_face_overall">face</string>
+    <string name="beauty_reshape_face_small">small face</string>
+    <string name="beauty_reshape_face_cut">cur face</string>
+    <string name="beauty_reshape_cheek">cheek</string>
+    <string name="beauty_reshape_jaw">jaw</string>
+    <string name="beauty_reshape_eye">big eye</string>
+    <string name="beauty_reshape_nose_lean">lean nose</string>
+    <string name="beauty_reshape_nose_long">long nose</string>
+    <string name="beauty_reshape_chin">chin</string>
+    <string name="beauty_reshape_forehead">forehead</string>
+    <string name="beauty_reshape_eye_rotate">rotated eye</string>
+    <string name="beauty_reshape_mouth_zoom">zoom mouth</string>
+    <string name="beauty_reshape_mouth_smile">smile</string>
+    <string name="beauty_reshape_decree">decree</string>
+    <string name="beauty_reshape_dark_circle">dark circle</string>
+
+    <!-- 美体功能-->
+    <string name="beauty_body_thin">瘦身</string>
+    <string name="beauty_body_long_leg">长腿</string>
+
+    <!--美妆功能-->
+    <string name="makeup_lip">lip</string>
+    <string name="makeup_blusher">blusher</string>
+    <string name="makeup_eyelash">eyelash</string>
+    <string name="makeup_pupil">pupil</string>
+    <string name="makeup_hair">hair</string>
+    <string name="makeup_eye">eye</string>
+    <string name="makeup_eyebrow">eyebrow</string>
+
+    <!--美妆功能种类-->
+    <string name="lip_huluopohong">Carrot red</string>
+    <string name="lip_huoliju">orange</string>
+    <string name="lip_yingsuhong">Poppy red</string>
+    <string name="blusher_shaishanghong">Sunburn</string>
+    <string name="blusher_weixunfen">pink</string>
+    <string name="blusher_yuanqiju">Tangerine</string>
+    <string name="eyelash_wumei">charming</string>
+    <string name="eyelash_nongmi">Thick</string>
+    <string name="eyelash_shanxing">sector</string>
+    <string name="pupil_babizi">Purple</string>
+    <string name="pupil_hunxuelan">blue</string>
+    <string name="pupil_hunxuelv">green</string>
+    <string name="hair_anlan">blue</string>
+    <string name="hair_molv">green</string>
+    <string name="hair_shenzong">brown</string>
+    <string name="eye_shaonvfen">Girl pink</string>
+    <string name="eye_yanxunzong">Smoked</string>
+    <string name="eye_ziranlan">blue</string>
+    <string name="eyebrow_chunhei">black</string>
+    <string name="eyebrow_danhui">gray</string>
+    <string name="eyebrow_ziranhei">Natural</string>
+
+    <!--主页面标签-->
+    <string name="detect">detect</string>
+    <string name="effect">effect</string>
+    <string name="sticker">sticker</string>
+
+    <!-- pet type -->
+    <string name="cat">cat</string>
+    <string name="dog">dog</string>
+    <string name="human">human</string>
+    <string name="unknown">unknown</string>
+
+    <!-- pet face -->
+    <string name="pet_face_type">pet type</string>
+    <string name="left_eye_open">left eye open</string>
+    <string name="right_eye_open">right eye open</string>
+    <string name="mouth_open">mouth open</string>
+
+    <string name="pet_face_title">pet face</string>
+    <string name="tab_pet_face">pet face</string>
+
+    <!-- face cluster -->
+    <string name="tab_face_cluster">Face cluster</string>
+    <string name="face_cluster_class_name">Face </string>
+    <string name="face_cluster_clean">clean </string>
+    <string name="face_cluster_upload">upload</string>
+    <string name="face_cluster_start">start cluster</string>
+    <string name="face_cluster_null_class_name">No detect face</string>
+
+    <string name="face_verify_detect">detect same face</string>
+    <string name="face_verify_no_detect">no detect same face</string>
+
+    <string name="byte_beauty">byte beauty</string>
+    <string name="beauty_effect">beauty effect</string>
+    <string name="play">play</string>
+    <string name="beauty_publish">beauty publish</string>
+</resources>

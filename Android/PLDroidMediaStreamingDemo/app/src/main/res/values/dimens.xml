@@ -1,0 +1,30 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="pldroid_streaming_activity_horizontal_margin">0dp</dimen>
+    <dimen name="pldroid_streaming_activity_vertical_margin">0dp</dimen>
+    <dimen name="pldroid_streaming_item_padding">12dp</dimen>
+    <dimen name="pldroid_streaming_ring_size">72dp</dimen>
+    <dimen name="pldroid_streaming_ring_width">6dip</dimen>
+    <dimen name="pldroid_streaming_square_corner_radius">8dip</dimen>
+    <dimen name="pldroid_streaming_red_circle_padding">8dip</dimen>
+    <dimen name="pldroid_streaming_red_square_padding">16dip</dimen>
+    <dimen name="pldroid_streaming_streaming_status_padding">50dp</dimen>
+
+
+
+    <dimen name="radio_size">16sp</dimen>
+    <dimen name="setting_height">300dp</dimen>
+    <dimen name="toggle_height">25dp</dimen>
+    <dimen name="toggle_width">45dp</dimen>
+
+    <dimen name="radio_height">35dp</dimen>
+    <dimen name="radio_margin">20dp</dimen>
+    <dimen name="radio_padding">6dp</dimen>
+    <dimen name="grid_bound_width">2dp</dimen>
+    <dimen name="hand_info_height">70dp</dimen>
+    <dimen name="distance_info_height">30dp</dimen>
+    <dimen name="pet_face_info_height">60dp</dimen>
+</resources>

@@ -1,0 +1,80 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
+
+    defaultConfig {
+//        applicationId "com.qiniu.pili.droid.streaming.demo"
+        applicationId "com.bytedance.labcv.demo"
+        minSdkVersion 15
+        targetSdkVersion 27
+        versionCode 68
+        versionName "2.4.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    splits {
+
+        // Configures multiple APKs based on ABI.
+        abi {
+
+            // Enables building multiple APKs per ABI.
+            enable true
+
+            // By default all ABIs are included, so use reset() and include to specify that we only
+            // want APKs for x86 and x86_64.
+
+            // Resets the list of ABIs that Gradle should create APKs for to none.
+            reset()
+
+            // Specifies a list of ABIs that Gradle should create APKs for.
+            include 'armeabi-v7a','arm64-v8a'
+
+            // Specifies that we do not want to also generate a universal APK that includes all ABIs.
+            universalApk false
+        }
+    }
+
+    repositories{
+        flatDir {
+            dirs 'libs'
+        }
+        maven {
+            url "https://jitpack.io"
+        }
+    }
+}
+
+dependencies {
+    api LIB_SUPPORT_V4
+    api LIB_APPCOMPAT
+    api LIB_RECYCLERVIEW
+    api LIB_SUPPORT_ANNOTATIONS
+    api LIB_GRIDLAYOUT
+    api LIB_DESIGN
+
+    compile 'com.github.angads25:filepicker:1.0.6'
+    compile 'com.qiniu:happy-dns:0.2.8'
+    compile 'com.journeyapps:zxing-android-embedded:3.0.2@aar'
+    compile 'com.google.zxing:core:3.2.0'
+//    compile 'com.android.support:appcompat-v7:23.0.0'
+    compile files('libs/pldroid-media-streaming-2.4.0.jar')
+
+
+    api 'com.zcw:togglebutton-library:1.0.0'
+    api 'org.adw.library:discrete-seekbar:1.0.1'
+    api 'com.github.hackware1993:MagicIndicator:1.5.0'
+    api 'com.github.castorflex.smoothprogressbar:library:1.1.0'
+    api 'com.squareup.okhttp3:okhttp:3.6.0'
+    compile ("com.github.bumptech.glide:glide:3.7.0")
+
+    compile files('libs/effectsdk-release.aar')
+
+    compile files('libs/pldroid-player-2.1.8.jar')
+}

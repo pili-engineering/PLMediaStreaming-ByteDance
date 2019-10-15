@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="pldroid_streaming_white">#fff</color>
+    <color name="pldroid_streaming_red">#f00</color>
+    <color name="pldroid_streaming_yellow">#FFFF00</color>
+
+
+
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="transparent">@android:color/transparent</color>
+    <color name="colorChecked">#33cccc</color>
+    <color name="colorUnChecked">#aaaaaa</color>
+    <color name="setting_color">#AAAAAA</color>
+    <color name="tipboard_bg">#80000000</color>
+    <color name="featureboard_bg">#ffffff</color>
+    <color name="selected_color">#1E90FF</color>
+    <color name="track_selected_color">#87CEFA</color>
+
+    <color name="focus_bg_colcor">#AAAAAA</color>
+
+    <color name="grid_focused">#3F78B5</color>
+    <color name="grid_selected">#303F9F</color>
+    <color name="viewfinder_laser">#ffcc0000</color> <!-- Android standard ICS color -->
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="result_view">#b0000000</color>
+    <color name="possible_result_points">#c0ffbd21</color> <!-- Android standard ICS color -->
+
+    <color name="colorBg">#99000000</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorGrey">#9C9C9C</color>
+</resources>

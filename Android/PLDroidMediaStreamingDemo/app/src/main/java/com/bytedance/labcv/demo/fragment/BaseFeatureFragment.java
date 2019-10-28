@@ -5,7 +5,6 @@ import com.bytedance.labcv.demo.base.IPresenter;
 
 /**
  * 每个功能fragemnt的基类
- * base class of each fragment
  * @param <T>
  */
 public abstract class BaseFeatureFragment<T extends IPresenter, Callback> extends BaseFragment<T> {

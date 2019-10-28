@@ -13,11 +13,9 @@ import android.view.View;
 
 import com.qiniu.pili.droid.streaming.demo.R;
 
-
 /**
  * Created by QunZhang on 2019-07-26 16:59
  * 能够显示数值的 ProgressBar
- * ProgressBar which can displaying values
  */
 public class ProgressBar extends View {
     public static final int DEFAULT_RADIUS = 25;
@@ -34,7 +32,6 @@ public class ProgressBar extends View {
     public static final int MAX_PROGRESS = 100;
 
     // view 基本数据
-    // view base data
     private int mWidth;
     private int mLeftPadding;
     private int mRightPadding;
@@ -44,7 +41,6 @@ public class ProgressBar extends View {
     private boolean isTouch;
 
     // 绘制 line 和 circle 相关
-    // draw line and circle
     private int mLineHeight = DEFAULT_LINE_HEIGHT;
     private int mActiveLineColor = DEFAULT_ACTIVE_COLOR;
     private int mInactiveLineColor = DEFAULT_INACTIVE_COLOR;
@@ -55,7 +51,6 @@ public class ProgressBar extends View {
     private float mProgress = 0F;
 
     // 展示进度的动画相关
-    // show progress animation
     private boolean isShowText;
     private int mDelayShowText = DEFAULT_DELAY_SHOW_PROGRESS;
     private int mMaxTextHeight = DEFAULT_MAX_TEXT_HEIGHT;
@@ -86,7 +81,6 @@ public class ProgressBar extends View {
     }
 
     // 从 xml 中加载初始数据
-    // load init data form xml
     private void initAttr(Context context, AttributeSet attrs) {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.ProgressBar);
         mActiveLineColor = ta.getColor(R.styleable.ProgressBar_activeLineColor, DEFAULT_ACTIVE_COLOR);
@@ -111,7 +105,6 @@ public class ProgressBar extends View {
         mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
 
         // 延迟显示 text Runnable
-        // delay to show text
         mShowProgressAction = new Runnable() {
             @Override
             public void run() {
@@ -122,7 +115,6 @@ public class ProgressBar extends View {
     }
 
     // 初始化各基准值大小
-    @SuppressLint("NewApi")
     private void initSize(int w, int h) {
         mWidth = w;
 
@@ -183,6 +175,7 @@ public class ProgressBar extends View {
         canvas.drawLine(startX, startY, endX, endY, paint);
     }
 
+    // 绘制进度点
     private void drawCircle(Canvas canvas) {
         if (isShowText) {
             calculateTextHeightAndSize();
@@ -201,6 +194,7 @@ public class ProgressBar extends View {
         canvas.drawCircle(cx, cy, radius, paint);
     }
 
+    // 绘制进度值
     private void drawText(Canvas canvas) {
         if (isShowText) {
             Paint paint = mPaint;
@@ -214,16 +208,13 @@ public class ProgressBar extends View {
     }
 
     // 当进度数字需要展示时，计算当前数字的高度及大小，以实现动画效果
-    // When the progress number needs to be displayed, calculate the height and size of the current number to achieve animation effect
     private void calculateTextHeightAndSize() {
         if (isTouch && mTextHeight < mMaxTextHeight) {
             // 上升动画
-            // Rise in the animation
             mTextHeight += mTextHeightSlot;
             mTextSize += mTextSizeSlot;
         } else if (!isTouch && mTextHeight > 0) {
             // 下落动画
-            // Whereabouts of the animation
             mTextHeight -= mTextHeightSlot;
             mTextSize -= mTextSizeSlot;
 
@@ -232,7 +223,6 @@ public class ProgressBar extends View {
             }
         }
         // 截取为标准值
-        // Intercept to the standard value
         if (mTextSize > mMaxTextSize) {
             mTextSize = mMaxTextSize;
         } else if (mTextSize < 0) {
@@ -248,7 +238,6 @@ public class ProgressBar extends View {
     }
 
     // 根据用户当前触摸的位置计算进度值
-    // Calculate the progress value based on the user's current touch location
     private void calculateProgress(int x) {
         // 考虑到左右两边的 padding
         if (x < mLeftPadding) {

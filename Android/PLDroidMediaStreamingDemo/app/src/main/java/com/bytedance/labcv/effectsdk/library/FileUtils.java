@@ -21,7 +21,7 @@ public class FileUtils {
 
     /**
      * 递归拷贝Asset目录中的文件到rootDir中
-     * Recursively copy the files in the Asset directory to rootDir
+     *
      * @param assets
      * @param path
      * @param rootDir
@@ -42,13 +42,6 @@ public class FileUtils {
             copyToFileOrThrow(input, dest);
         }
 
-    }
-
-    public static void copyAssets(AssetManager assets, String dir) throws IOException {
-        String[] paths = assets.list("");
-        for (String s : paths) {
-            copyAssets(assets, s, dir);
-        }
     }
 
     public static boolean isAssetsDir(AssetManager assets, String path) {
@@ -93,7 +86,7 @@ public class FileUtils {
     /**
      * 解压压缩包
      * 解压后删除zip文件
-     * unzip the package and delete thd zip file
+     *
      * @return
      */
     public static boolean unzipAssetFile(Context context, String zipFilePath, File dstDir) {
@@ -180,24 +173,6 @@ public class FileUtils {
         }
         return true;
 
-    }
-
-    public static boolean clearDir(File dir) {
-        if (!dir.exists()) {
-            return true;
-        }
-        File[] files = dir.listFiles();
-        for (File file : files) {
-            if (file.isDirectory()) {
-                clearDir(file);
-                file.delete();
-            } else {
-                if (file.exists()) {
-                    file.delete();
-                }
-            }
-        }
-        return true;
     }
 
     public static String generateVideoFile() {

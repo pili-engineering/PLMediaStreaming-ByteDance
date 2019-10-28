@@ -38,25 +38,5 @@ public interface EffectContract {
          *          Returns a String array that stores all the composer node's paths, namely {@link ComposerNode#getNode()}
          */
         abstract public String[] generateComposerNodes(SparseArray<ComposerNode> composerNodeMap);
-
-        /**
-         * 设置美颜默认值
-         * @param composerNodeMap composer node map
-         */
-        abstract public void generateDefaultBeautyNodes(SparseArray<ComposerNode> composerNodeMap);
-
-        /**
-         * 获取某一功能默认值
-         * @param type 功能 id
-         * @return 默认值
-         */
-        abstract public float getDefaultValue(int type);
-
-        /**
-         * 判断某一个功能是否有强度调节
-         * @param type 功能 id
-         * @return true 可以调节强度 false 不可以调节
-         */
-        abstract public boolean hasIntensity(int type);
     }
 }

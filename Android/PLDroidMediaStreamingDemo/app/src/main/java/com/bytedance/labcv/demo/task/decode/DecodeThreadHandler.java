@@ -119,7 +119,6 @@ public class DecodeThreadHandler extends Handler {
 
     private int[] byte2Int(byte[] b){
         // 数组长度对4余数
-        // Array length mod 4
         int r;
         byte[] copy;
         if ((r = b.length % 4) != 0) {

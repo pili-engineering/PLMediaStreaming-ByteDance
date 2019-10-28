@@ -6,7 +6,6 @@ import android.hardware.SensorManager;
 import android.view.OrientationEventListener;
 
 import com.bytedance.labcv.effectsdk.BytedEffectConstants;
-import com.bytedance.labcv.effectsdk.RenderManager;
 
 public class OrientationSensor {
 

@@ -35,8 +35,8 @@ public class MakeupOptionFragment
         super.onViewCreated(view, savedInstanceState);
         setPresenter(new ItemGetPresenter());
 
-        rv = (RecyclerView) view.findViewById(R.id.rv_makeup_option);
-        ivClose = (ImageView) view.findViewById(R.id.iv_close_makeup_option);
+        rv = view.findViewById(R.id.rv_makeup_option);
+        ivClose = view.findViewById(R.id.iv_close_makeup_option);
         ivClose.setOnClickListener(this);
 
         rv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -83,8 +83,6 @@ public class MakeupOptionFragment
          * 点击关闭按钮，收起当前的 MakeupOptionFragment
          */
         void onCloseClick();
-
-        void onDefaultClick();
 
         /**
          * 点击某一项之后，回调给 EffectFragment 处理

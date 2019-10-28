@@ -128,9 +128,9 @@ public class ItemGetPresenter extends ItemGetContract.Presenter {
         switch (type & SUB_MASK) {
             case TYPE_MAKEUP_LIP:
                 items.add(new ButtonItem(R.drawable.ic_none, context.getString(R.string.close), new ComposerNode(TYPE_MAKEUP_LIP)));
-                items.add(new ButtonItem(R.drawable.ic_makeup_lip, context.getString(R.string.lip_huluopohong), new ComposerNode(TYPE_MAKEUP_LIP, "lip/xiyouse", "Internal_Makeup_Lips")));
-                items.add(new ButtonItem(R.drawable.ic_makeup_lip, context.getString(R.string.lip_huoliju), new ComposerNode(TYPE_MAKEUP_LIP, "lip/yuanqiju", "Internal_Makeup_Lips")));
-                items.add(new ButtonItem(R.drawable.ic_makeup_lip, context.getString(R.string.lip_yingsuhong), new ComposerNode(TYPE_MAKEUP_LIP, "lip/fuguhong", "Internal_Makeup_Lips")));
+                items.add(new ButtonItem(R.drawable.ic_makeup_lip, context.getString(R.string.lip_huluopohong), new ComposerNode(TYPE_MAKEUP_LIP, "lip/huluobohong")));
+                items.add(new ButtonItem(R.drawable.ic_makeup_lip, context.getString(R.string.lip_huoliju), new ComposerNode(TYPE_MAKEUP_LIP, "lip/huoliju")));
+                items.add(new ButtonItem(R.drawable.ic_makeup_lip, context.getString(R.string.lip_yingsuhong), new ComposerNode(TYPE_MAKEUP_LIP, "lip/yingsuhong")));
                 break;
             case TYPE_MAKEUP_BLUSHER:
                 items.add(new ButtonItem(R.drawable.ic_none, context.getString(R.string.close), new ComposerNode(TYPE_MAKEUP_BLUSHER)));

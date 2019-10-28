@@ -1,12 +1,9 @@
 package com.bytedance.labcv.demo.view;
 
 import android.content.Context;
-import android.graphics.Rect;
-import android.graphics.RectF;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import com.bytedance.labcv.demo.ResourceHelper;
 import com.bytedance.labcv.effectsdk.BefDistanceInfo;
 import com.bytedance.labcv.effectsdk.BefHandInfo;
 import com.bytedance.labcv.effectsdk.BefPetFaceInfo;
@@ -111,7 +108,7 @@ public class TipManager {
     }
 
 
-    public void updateHandInfo(BefHandInfo handInfo,int preViewHeight, int previewWidth, int surfaceViewHeight, int surfaceViewWidth) {
+    public void updateHandInfo(BefHandInfo handInfo, int preViewHeight, int previewWidth, int surfaceViewHeight, int surfaceViewWidth) {
         if (!mHandTipsAdded) return;
         if (null ==  handInfo || handInfo.getHandCount() == 0)  {
             handTips[0].setVisibility(View.GONE);
@@ -164,7 +161,7 @@ public class TipManager {
     }
 
 
-    public void updatePetFaceInfo(BefPetFaceInfo petFaceInfo,int preViewHeight, int previewWidth, int surfaceViewHeight, int surfaceViewWidth) {
+    public void updatePetFaceInfo(BefPetFaceInfo petFaceInfo, int preViewHeight, int previewWidth, int surfaceViewHeight, int surfaceViewWidth) {
         if (!mPetFaceTipsAdded) return;
         if (null ==  petFaceInfo )  {
             for (PetFaceInfoTip tip: petFaceTips){

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bytedance.labcv.demo.MainActivity;
 import com.bytedance.labcv.demo.adapter.ButtonViewRVAdapter;
 import com.bytedance.labcv.demo.contract.ItemGetContract;
 import com.bytedance.labcv.demo.contract.presenter.ItemGetPresenter;
@@ -37,7 +38,7 @@ public class BeautyFaceFragment extends BaseFeatureFragment<ItemGetContract.Pres
         super.onViewCreated(view, savedInstanceState);
         setPresenter(new ItemGetPresenter());
 
-        rv = (RecyclerView) view.findViewById(R.id.rv_beauty);
+        rv = view.findViewById(R.id.rv_beauty);
         List<ButtonItem> items = mPresenter.getItems(mType);
         ButtonViewRVAdapter adapter = new ButtonViewRVAdapter(items, this);
         rv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -57,11 +58,6 @@ public class BeautyFaceFragment extends BaseFeatureFragment<ItemGetContract.Pres
     @Override
     public void onProgress(float progress) {
         ((ButtonViewRVAdapter)rv.getAdapter()).onProgress(progress);
-    }
-
-    @Override
-    public void onProgress(float progress, int id) {
-        ((ButtonViewRVAdapter)rv.getAdapter()).onProgress(progress, id);
     }
 
     @Override

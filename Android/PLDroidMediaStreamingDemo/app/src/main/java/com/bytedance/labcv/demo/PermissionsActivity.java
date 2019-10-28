@@ -12,7 +12,6 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.bytedance.labcv.demo.utils.Config;
-import com.qiniu.pili.droid.streaming.demo.MainActivity;
 
 public class PermissionsActivity extends Activity {
 

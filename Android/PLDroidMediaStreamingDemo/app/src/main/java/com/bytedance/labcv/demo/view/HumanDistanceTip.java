@@ -22,7 +22,7 @@ public class HumanDistanceTip extends ResultTip<BefDistanceInfo.BefDistance> {
     public HumanDistanceTip(@NonNull Context context) {
         super(context);
         addLayout(context, R.layout.view_distance_info);
-        tvDist = (TextView) findViewById(R.id.tv_dist);
+        tvDist = findViewById(R.id.tv_dist);
     }
 
     public HumanDistanceTip(@NonNull Context context, @Nullable AttributeSet attrs) {

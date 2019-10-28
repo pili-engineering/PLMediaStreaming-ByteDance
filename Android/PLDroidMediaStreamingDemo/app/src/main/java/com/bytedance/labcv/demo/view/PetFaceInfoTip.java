@@ -30,10 +30,10 @@ public class PetFaceInfoTip  extends ResultTip<BefPetFaceInfo.PetFace> {
     public PetFaceInfoTip(@NonNull Context context) {
         super(context);
         addLayout(context, R.layout.view_pet_face_info);
-        tvPetFaceType = (TextView) findViewById(R.id.tv_pet_face_type);
-        tvLeftEye = (TextView) findViewById(R.id.tv_left_eye_pet_face_info);
-        tvRightEye = (TextView) findViewById(R.id.tv_right_eye_pet_face_info);
-        tvMouth = (TextView) findViewById(R.id.tv_mouth_pet_face_info);
+        tvPetFaceType = findViewById(R.id.tv_pet_face_type);
+        tvLeftEye = findViewById(R.id.tv_left_eye_pet_face_info);
+        tvRightEye = findViewById(R.id.tv_right_eye_pet_face_info);
+        tvMouth = findViewById(R.id.tv_mouth_pet_face_info);
 
         if (mActionMap == null) {
             mActionMap = new SparseArray<>();

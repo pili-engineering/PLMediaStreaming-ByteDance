@@ -2,19 +2,12 @@ package com.bytedance.labcv.demo.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.ImageFormat;
-import android.graphics.Rect;
-import android.graphics.YuvImage;
 import android.media.ExifInterface;
-import android.opengl.GLES20;
 import android.os.Environment;
 import android.text.TextUtils;
 
 import com.bytedance.labcv.effectsdk.library.LogUtils;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -52,7 +45,7 @@ public class BitmapUtils {
 
     /**
      * 压缩Bitmap的大小
-     * Compress Bitmap size
+     *
      * @param imagePath     图片文件路径
      * @param requestWidth  压缩到想要的宽度
      * @param requestHeight 压缩到想要的高度
@@ -98,27 +91,6 @@ public class BitmapUtils {
 
     }
 
-
-    public static Bitmap getBitmapFromPixels(ByteBuffer byteBuffer, int width, int height) {
-
-        Bitmap mCameraBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-
-        byteBuffer.position(0);
-        mCameraBitmap.copyPixelsFromBuffer(byteBuffer);
-        byteBuffer.position(0);
-        return mCameraBitmap;
-    }
-
-    public static Bitmap getBitmapFromYuv(ByteBuffer data, int width, int height) {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        YuvImage yuvImage = new YuvImage(data.array(), ImageFormat.NV21, width, height, null);
-        yuvImage.compressToJpeg(new Rect(0, 0, width, height), 50, out);
-        byte[] imageBytes = out.toByteArray();
-        Bitmap mCameraBitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-
-        return mCameraBitmap;
-    }
-
     public static File saveToLocal(Bitmap bitmap){
         if (null == bitmap) return null;
         String temp = CommonUtils.createtFileName(".png");
@@ -141,37 +113,5 @@ public class BitmapUtils {
 
     }
 
-    public static Bitmap bitmapFromGLTexture(int texture, int width, int height, boolean flipVertical) {
-        if ((width <= 0 || height <= 0)) throw new AssertionError();
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        ByteBuffer buffer = ByteBuffer.allocateDirect(width*height*4);
 
-        int[] fbs = new int[1];
-        GLES20.glGenFramebuffers(1, fbs, 0);
-//        if ((GLES20.glGetError() == GLES20.GL_NO_ERROR)) throw new AssertionError();
-
-        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, fbs[0]);
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE10);
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture);
-        GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0,
-                GLES20.GL_TEXTURE_2D, texture, 0);
-        GLES20.glReadPixels(0, 0, width, height, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, buffer);
-
-        //unbind
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
-        GLES20.glDeleteFramebuffers(1, fbs, 0);
-
-        bitmap.copyPixelsFromBuffer(buffer);
-        if (flipVertical) {
-            Bitmap ret = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-            Canvas ctx = new Canvas(ret);
-            ctx.scale(1, -1);
-            ctx.translate(0, -height);
-            ctx.drawBitmap(bitmap, 0, 0, null);
-            return ret;
-        }
-        return bitmap;
-    }
 }

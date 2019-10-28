@@ -131,4 +131,8 @@ public class CameraProxy {
         return textureHolder.getmSurfaceTextureID();
     }
 
+    public long getTextureTime(){
+        return textureHolder.getSurfaceTexture().getTimestamp();
+    }
+
 }

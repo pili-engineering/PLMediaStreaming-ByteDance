@@ -71,15 +71,15 @@ public class ButtonView extends FrameLayout {
             @Override
             public void run() {
                 int height = llContent.getHeight();
-                FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) llContent.getLayoutParams();
+                LayoutParams lp = (LayoutParams) llContent.getLayoutParams();
                 lp.width = (int) (height * WH_RATIO);
                 llContent.setLayoutParams(lp);
             }
         });
 
-        iv = (ImageView) findViewById(R.id.iv_face_options);
-        tvTitle = (TextView) findViewById(R.id.tv_title_face_options);
-        tvDesc = (TextView) findViewById(R.id.tv_desc_face_options);
+        iv = findViewById(R.id.iv_face_options);
+        tvTitle = findViewById(R.id.tv_title_face_options);
+        tvDesc = findViewById(R.id.tv_desc_face_options);
         vPoint = findViewById(R.id.v_face_options);
 
         colorOn = ActivityCompat.getColor(context, R.color.colorWhite);

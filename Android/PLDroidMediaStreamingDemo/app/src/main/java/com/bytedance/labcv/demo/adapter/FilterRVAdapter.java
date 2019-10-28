@@ -75,9 +75,9 @@ public class FilterRVAdapter extends SelectRVAdapter<FilterRVAdapter.ViewHolder>
 
         ViewHolder(View itemView) {
             super(itemView);
-            ll = (LinearLayout) itemView.findViewById(R.id.ll_item_filter);
-            iv = (ImageView) itemView.findViewById(R.id.iv_item_filter);
-            tv = (TextView) itemView.findViewById(R.id.tv_item_filter);
+            ll = itemView.findViewById(R.id.ll_item_filter);
+            iv = itemView.findViewById(R.id.iv_item_filter);
+            tv = itemView.findViewById(R.id.tv_item_filter);
         }
     }
 }

@@ -22,11 +22,8 @@ public class AppUtils {
     }
 
     // 加速glreadPixels 针对低性能GPU能加速，但不建议开启，会有帧不同步问题
-    //  Acceleration glreadPixels is capable of acceleration for low performance GPU,
-    // but it is not recommended to turn it on, because of the problem of frame unsynchronization
     private static boolean accGlReadPixels = false;
     // 适配特殊设备
-    // Adapt to special equipment
     private static SupportMode supportMode = SupportMode.NORMAL;
 
     public static SupportMode getSupportMode() {

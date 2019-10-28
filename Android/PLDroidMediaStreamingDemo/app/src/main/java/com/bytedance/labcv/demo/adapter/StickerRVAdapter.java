@@ -73,9 +73,9 @@ public class StickerRVAdapter extends SelectRVAdapter<StickerRVAdapter.ViewHolde
 
         ViewHolder(View itemView) {
             super(itemView);
-            ll = (LinearLayout) itemView.findViewById(R.id.ll_item_sticker);
-            iv = (ImageView) itemView.findViewById(R.id.iv_item_sticker);
-            tv = (TextView) itemView.findViewById(R.id.tv_item_sticker);
+            ll = itemView.findViewById(R.id.ll_item_sticker);
+            iv = itemView.findViewById(R.id.iv_item_sticker);
+            tv = itemView.findViewById(R.id.tv_item_sticker);
         }
     }
 }

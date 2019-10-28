@@ -8,10 +8,8 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 
-
 /**
  * 基类 飘在屏幕任意位置的预测结果 可跟随
- * A prediction floating anywhere on the screen
  * @param <T>
  */
 public abstract class ResultTip<T> extends FrameLayout {
@@ -37,8 +35,6 @@ public abstract class ResultTip<T> extends FrameLayout {
 
     /**
      * 因相机输出比例和屏幕比例不一致会执行纹理裁剪，裁剪后框的坐标也要对应裁剪
-     * Texture clipping is performed because the camera output ratio is not consistent with the screen ratio,
-     * the coordinates of the cropped frame should also be cropped accordingly
      * @param rect
      * @param preViewHeight
      * @param previewWidth

@@ -1,7 +1,6 @@
 package com.bytedance.labcv.demo.adapter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -139,8 +138,8 @@ public class FaceClusterAdapter extends RecyclerView.Adapter<FaceClusterAdapter.
         TextView mTv;
         ViewHolder(View itemView) {
             super(itemView);
-            mIv = (ImageView) itemView.findViewById(R.id.iv_cluster_item);
-            mTv = (TextView) itemView.findViewById(R.id.tv_cluster_item);
+            mIv = itemView.findViewById(R.id.iv_cluster_item);
+            mTv = itemView.findViewById(R.id.tv_cluster_item);
             mRoot = itemView.findViewById(R.id.ll_cluster_item);
         }
     }

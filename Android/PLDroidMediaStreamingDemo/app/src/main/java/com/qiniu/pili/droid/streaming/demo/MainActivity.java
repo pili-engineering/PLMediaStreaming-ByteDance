@@ -22,7 +22,6 @@ import com.google.zxing.integration.android.IntentResult;
 import com.qiniu.pili.droid.streaming.StreamingEnv;
 import com.qiniu.pili.droid.streaming.demo.activity.AVStreamingActivity;
 import com.qiniu.pili.droid.streaming.demo.activity.AudioStreamingActivity;
-import com.qiniu.pili.droid.streaming.demo.activity.ImportStreamingActivity;
 import com.qiniu.pili.droid.streaming.demo.activity.ScreenStreamingActivity;
 import com.qiniu.pili.droid.streaming.demo.activity.StreamingBaseActivity;
 import com.qiniu.pili.droid.streaming.demo.fragment.CameraConfigFragment;
@@ -30,8 +29,7 @@ import com.qiniu.pili.droid.streaming.demo.fragment.EncodingConfigFragment;
 import com.qiniu.pili.droid.streaming.demo.utils.Cache;
 import com.qiniu.pili.droid.streaming.demo.utils.PermissionChecker;
 import com.qiniu.pili.droid.streaming.demo.utils.Util;
-import com.qiniu.pili.droid.streaming.effect.BeautyStreamingActivity;
-import com.qiniu.pili.droid.streaming.effect.TestBeautyStreamingActivity;
+import com.qiniu.pili.droid.streaming.effect.BeautyImportStreamingActivity;
 import com.qiniu.pili.droid.streaming.effect.utils.Utils;
 
 import java.net.URI;
@@ -47,10 +45,10 @@ public class MainActivity extends FragmentActivity {
     private static final String[] INPUT_TYPES = { "Authorized", "Unauthorized" };
     private static final String[] STREAM_TYPES = { "Beauty-Video","Video-Audio", "Audio", "Import", "Screen" };
     private static final Class[] ACTIVITY_CLASSES = {
-            BeautyStreamingActivity.class,
+            AVStreamingActivity.class,
             AVStreamingActivity.class,
             AudioStreamingActivity.class,
-            ImportStreamingActivity.class,
+            BeautyImportStreamingActivity.class,
             ScreenStreamingActivity.class
     };
 

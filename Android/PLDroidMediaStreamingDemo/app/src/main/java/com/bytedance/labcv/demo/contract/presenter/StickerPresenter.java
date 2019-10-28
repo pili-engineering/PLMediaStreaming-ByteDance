@@ -2,6 +2,7 @@ package com.bytedance.labcv.demo.contract.presenter;
 
 import android.content.Context;
 
+
 import com.bytedance.labcv.demo.ResourceHelper;
 import com.bytedance.labcv.demo.contract.StickerContract;
 import com.bytedance.labcv.demo.model.StickerItem;

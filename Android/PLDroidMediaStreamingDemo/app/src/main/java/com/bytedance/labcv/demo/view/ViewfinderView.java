@@ -34,6 +34,7 @@ import com.qiniu.pili.droid.streaming.demo.R;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 /*
  * Copyright (C) 2008 ZXing authors
  *

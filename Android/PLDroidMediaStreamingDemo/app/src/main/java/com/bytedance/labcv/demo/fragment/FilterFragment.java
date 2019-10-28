@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bytedance.labcv.demo.MainActivity;
 import com.bytedance.labcv.demo.adapter.FilterRVAdapter;
 import com.bytedance.labcv.demo.contract.FilterContract;
 import com.bytedance.labcv.demo.contract.presenter.FilterPresenter;
@@ -21,7 +22,7 @@ import java.io.File;
  * 滤镜
  */
 public class FilterFragment extends BaseFeatureFragment<FilterContract.Presenter, FilterFragment.IFilterCallback>
-        implements FilterRVAdapter.OnItemClickListener,
+        implements FilterRVAdapter.OnItemClickListener, EffectFragment.IProgressCallback,
         OnCloseListener, FilterContract.View {
     private RecyclerView rv;
 
@@ -49,6 +50,11 @@ public class FilterFragment extends BaseFeatureFragment<FilterContract.Presenter
     @Override
     public void onItemClick(File file) {
         getCallback().onFilterSelected(file);
+    }
+
+    @Override
+    public void onProgress(float progress) {
+
     }
 
     @Override

@@ -61,13 +61,14 @@
             android:theme="@android:style/Theme.Holo.Light.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"></activity>
 
+
         <activity
             android:name="com.qiniu.pili.droid.streaming.screen.ScreenCaptureRequestActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
 
         <activity android:name="com.bytedance.labcv.demo.WelcomeActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -81,15 +82,14 @@
 
         </activity>
 
-        <activity android:name="com.qiniu.pili.droid.streaming.effect.BeautyStreamingActivity"
+        <activity android:name="com.qiniu.pili.droid.streaming.effect.TestBeautyStreamingActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             />
 
-        <activity android:name="com.qiniu.pili.droid.streaming.effect.TestBeautyStreamingActivity"
+        <activity android:name="com.qiniu.pili.droid.streaming.effect.BeautyImportStreamingActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             />
 

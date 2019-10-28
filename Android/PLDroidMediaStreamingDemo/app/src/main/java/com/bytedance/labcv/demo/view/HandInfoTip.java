@@ -6,10 +6,8 @@ import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-
 import android.util.Log;
 import android.widget.TextView;
-
 
 import com.bytedance.labcv.effectsdk.BefHandInfo;
 import com.qiniu.pili.droid.streaming.demo.R;
@@ -72,9 +70,9 @@ public class HandInfoTip extends ResultTip<BefHandInfo.BefHand> {
     public HandInfoTip(@NonNull Context context) {
         super(context);
         addLayout(context, R.layout.view_hand_info);
-        tvGesture = (TextView) findViewById(R.id.tv_gesture);
-        tvPunching = (TextView) findViewById(R.id.tv_punching);
-        tvClapping = (TextView) findViewById(R.id.tv_clapping);
+        tvGesture = findViewById(R.id.tv_gesture);
+        tvPunching = findViewById(R.id.tv_punching);
+        tvClapping = findViewById(R.id.tv_clapping);
     }
 
     public HandInfoTip(@NonNull Context context, @Nullable AttributeSet attrs) {

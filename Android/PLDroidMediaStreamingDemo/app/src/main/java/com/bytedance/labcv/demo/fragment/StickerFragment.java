@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bytedance.labcv.demo.MainActivity;
 import com.bytedance.labcv.demo.adapter.StickerRVAdapter;
 import com.bytedance.labcv.demo.contract.StickerContract;
 import com.bytedance.labcv.demo.contract.presenter.StickerPresenter;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
 public class Camera2EnableConfig {
 
     public static final List<String> CAM2_ENABLE_LIST = new ArrayList<>();

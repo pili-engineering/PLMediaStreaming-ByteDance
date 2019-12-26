@@ -79,34 +79,33 @@
             });
         }];
         [d implementMethod:@selector(mediaStreamingSession:cameraSourceDidGetPixelBuffer:) withBlock:^CVPixelBufferRef(PLMediaStreamingSession *session, CVPixelBufferRef pixelBuffer) {
-//            __strong typeof(wSelf) strongSelf = wSelf;
-//            if (strongSelf.needProcessVideo) {
-//                size_t w = CVPixelBufferGetWidth(pixelBuffer);
-//                size_t h = CVPixelBufferGetHeight(pixelBuffer);
-//                size_t par = CVPixelBufferGetBytesPerRow(pixelBuffer);
-//                CVPixelBufferLockBaseAddress(pixelBuffer, 0);
-//                uint8_t *pimg = CVPixelBufferGetBaseAddress(pixelBuffer);
-//                for (int i = 0; i < w; i ++){
-//                    for (int j = 0; j < h; j++){
-//                        pimg[j * par + i * 4 + 1] = 255;
-//                    }
-//                }
-//                CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
-//            }
-//
-//            if (_isDynamicWatermark) {
-//                ++_count;
-//                if (_count == 9) {
-//                    _count = 1;
-//                }
-//                NSString *name = [NSString stringWithFormat:@"ear_00%d.png", _count];
-//                UIImage *waterMark = [UIImage imageNamed:name];
-//                [session clearWaterMark];
-//                [session setWaterMarkWithImage:waterMark position:CGPointMake(10, 100)];
-//            }
-//
-//            return pixelBuffer;
-            return [_delegate process:pixelBuffer];
+            __strong typeof(wSelf) strongSelf = wSelf;
+            if (strongSelf.needProcessVideo) {
+                size_t w = CVPixelBufferGetWidth(pixelBuffer);
+                size_t h = CVPixelBufferGetHeight(pixelBuffer);
+                size_t par = CVPixelBufferGetBytesPerRow(pixelBuffer);
+                CVPixelBufferLockBaseAddress(pixelBuffer, 0);
+                uint8_t *pimg = CVPixelBufferGetBaseAddress(pixelBuffer);
+                for (int i = 0; i < w; i ++){
+                    for (int j = 0; j < h; j++){
+                        pimg[j * par + i * 4 + 1] = 255;
+                    }
+                }
+                CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
+            }
+            
+            if (_isDynamicWatermark) {
+                ++_count;
+                if (_count == 9) {
+                    _count = 1;
+                }
+                NSString *name = [NSString stringWithFormat:@"ear_00%d.png", _count];
+                UIImage *waterMark = [UIImage imageNamed:name];
+                [session clearWaterMark];
+                [session setWaterMarkWithImage:waterMark position:CGPointMake(10, 100)];
+            }
+            
+            return pixelBuffer;
         }];
     }];
 }

@@ -5,6 +5,7 @@
 #import "BEEffectDataManager.h"
 #import <Masonry/Masonry.h>
 #import "BEStudioConstants.h"
+#import "BEMacro.h"
 
 @interface BEModernFilterPickerViewController ()<BEModernFilterPickerViewDelegate>
 
@@ -32,15 +33,19 @@
     [self.filterPickerView setAllCellsUnSelected];
 }
 
+- (void)setSelectItem:(NSString *)filterPath {
+    [self.filterPickerView setSelectItem:filterPath];
+}
+
 #pragma mark - BEModernFilterPickerViewDelegate
 - (void)filterPicker:(BEModernFilterPickerView *)pickerView didSelectFilterPath:(NSString *)path {
     [[NSNotificationCenter defaultCenter] postNotificationName:BEEffectFilterDidChangeNotification object:nil userInfo:@{BEEffectNotificationUserInfoKey: path?:@""}];
 }
 
 - (void)loadData {
-//    @weakify(self)
+    @weakify(self)
     void(^completion)(BEEffectResponseModel *, NSError *) = ^(BEEffectResponseModel *responseModel, NSError *error) {
-//        @strongify(self)
+        @strongify(self)
         if (!error) {
             self.filters = responseModel.filterGroups.firstObject.filters;
             [self.filterPickerView refreshWithFilters:self.filters];

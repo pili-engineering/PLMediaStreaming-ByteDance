@@ -8,6 +8,7 @@ import android.view.View;
 import java.util.List;
 
 
+
 public interface CameraInterface {
     int CAMERA_BACK = Camera.CameraInfo.CAMERA_FACING_BACK;
     int CAMERA_FRONT = Camera.CameraInfo.CAMERA_FACING_FRONT;

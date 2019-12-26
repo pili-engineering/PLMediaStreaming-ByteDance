@@ -62,7 +62,7 @@ public class CameraFilter extends AbstractFilter implements IFilter {
             int vertexCount, int coordsPerVertex, int vertexStride,
             FloatBuffer texBuffer, int textureId, int texStride) {
 
-        GlUtil.checkGlError("CameraFilter");
+        GlUtil.checkGlError("draw start");
 
         useProgram();
 

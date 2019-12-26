@@ -3,14 +3,16 @@ package com.bytedance.labcv.demo.utils;
 import android.content.Context;
 import android.graphics.Point;
 
-import com.bytedance.labcv.demo.EffectRenderHelper;
+import com.bytedance.labcv.demo.core.EffectRenderHelper;
 
 /**
  * 不同算法模块组合的输入大小控制
+ * Input size control of different algorithm module combinations
  */
 public class InputSizeManager {
 
     // 算法模块推荐输入大小
+    // Algorithm module recommended input size
     public static final Point Face106Input = new Point(128, 224);
     public static final Point Face280Input = new Point(360, 640);
     public static final Point FaceAttriInput = new Point(360, 640);
@@ -24,7 +26,8 @@ public class InputSizeManager {
 
     /**
      * 根据开启的算法模块 计算最合适的输入大小 按照最大原则
-     *
+     * Calculating the most appropriate input size according to the open algorithm module，
+     * in accordance with the maximum principle
      * @param inputWidth  输入图像的宽度
      * @param inputHeight 输入图像的高度
      * @return
@@ -36,81 +39,6 @@ public class InputSizeManager {
         float xRatio = Face106Input.x * 1.0f / Math.min(inputWidth, inputHeight);
         float yRatio = Face106Input.y * 1.0f / Math.max(inputWidth, inputHeight);
         float preferRatio = Math.max(xRatio, yRatio);
-
-        if (effectRenderHelper.isDetect106Face || effectRenderHelper.isDetectDistance) {
-            xRatio = Face106Input.x * 1.0f / Math.min(inputWidth, inputHeight);
-            yRatio = Face106Input.y * 1.0f / Math.max(inputWidth, inputHeight);
-
-
-            float max = Math.max(xRatio, yRatio);
-            preferRatio = Math.max(preferRatio, max);
-
-        }
-        if (effectRenderHelper.isDetectFaceExtra) {
-            xRatio = Face280Input.x * 1.0f / Math.min(inputWidth, inputHeight);
-            yRatio = Face280Input.y * 1.0f / Math.max(inputWidth, inputHeight);
-            float max = Math.max(xRatio, yRatio);
-            preferRatio = Math.max(preferRatio, max);
-
-        }
-        if (effectRenderHelper.isDetectFaceAttr) {
-            xRatio = FaceAttriInput.x * 1.0f / Math.min(inputWidth, inputHeight);
-            yRatio = FaceAttriInput.y * 1.0f / Math.max(inputWidth, inputHeight);
-            float max = Math.max(xRatio, yRatio);
-            preferRatio = Math.max(preferRatio, max);
-
-        }
-        if (effectRenderHelper.isDetectHand) {
-            xRatio = HandInput.x * 1.0f / Math.min(inputWidth, inputHeight);
-            yRatio = HandInput.y * 1.0f / Math.max(inputWidth, inputHeight);
-            float max = Math.max(xRatio, yRatio);
-            preferRatio = Math.max(preferRatio, max);
-
-        }
-        if (effectRenderHelper.isDetectSkeleton) {
-            xRatio = SkeletonInput.x * 1.0f / Math.min(inputWidth, inputHeight);
-            yRatio = SkeletonInput.y * 1.0f / Math.max(inputWidth, inputHeight);
-
-
-            float max = Math.max(xRatio, yRatio);
-            preferRatio = Math.max(preferRatio, max);
-
-        }
-        if (effectRenderHelper.isMattingPortrait) {
-            xRatio = MattingInput.x * 1.0f / Math.min(inputWidth, inputHeight);
-            yRatio = MattingInput.y * 1.0f / Math.max(inputWidth, inputHeight);
-            float max = Math.max(xRatio, yRatio);
-            preferRatio = Math.max(preferRatio, max);
-
-        }
-
-        if (effectRenderHelper.isParsingHair) {
-            xRatio = HairCutInput.x * 1.0f / Math.min(inputWidth, inputHeight);
-            yRatio = HairCutInput.y * 1.0f / Math.max(inputWidth, inputHeight);
-            float max = Math.max(xRatio, yRatio);
-            preferRatio = Math.max(preferRatio, max);
-
-        }
-        if (effectRenderHelper.isFaceVerify) {
-            xRatio = FaceVerifyInput.x * 1.0f / Math.min(inputWidth, inputHeight);
-            yRatio = FaceVerifyInput.y * 1.0f / Math.max(inputWidth, inputHeight);
-            float max = Math.max(xRatio, yRatio);
-            preferRatio = Math.max(preferRatio, max);
-
-        }
-        if (effectRenderHelper.isQrDecoding) {
-            xRatio = QrdecodeInput.x * 1.0f / Math.min(inputWidth, inputHeight);
-            yRatio = QrdecodeInput.y * 1.0f / Math.max(inputWidth, inputHeight);
-            float max = Math.max(xRatio, yRatio);
-            preferRatio = Math.max(preferRatio, max);
-
-        }
-        if (effectRenderHelper.isDetectPetFace) {
-            xRatio = PetFaceInput.x * 1.0f / Math.min(inputWidth, inputHeight);
-            yRatio = PetFaceInput.y * 1.0f / Math.max(inputWidth, inputHeight);
-            float max = Math.max(xRatio, yRatio);
-            preferRatio = Math.max(preferRatio, max);
-        }
 
 
         return preferRatio > 1 ? 1 : preferRatio;

@@ -18,7 +18,7 @@
 
 - (void)panelDelegateGenerator:(PLPanelDelegateGenerator *)panelDelegateGenerator streamDidDisconnectWithError:(NSError *)error;
 - (void)panelDelegateGenerator:(PLPanelDelegateGenerator *)panelDelegateGenerator streamStateDidChange:(PLStreamState)state;
-- (CVPixelBufferRef)process:(CVPixelBufferRef)pixelBuffer;
+
 
 @end
 

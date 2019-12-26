@@ -10,19 +10,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.qiniu.pili.droid.streaming.demo.R;
 import com.bytedance.labcv.demo.adapter.ButtonViewRVAdapter;
 import com.bytedance.labcv.demo.contract.ItemGetContract;
 import com.bytedance.labcv.demo.contract.presenter.ItemGetPresenter;
 import com.bytedance.labcv.demo.model.ButtonItem;
 import com.bytedance.labcv.demo.model.ComposerNode;
-import com.qiniu.pili.droid.streaming.demo.R;
 
 
 public class MakeupOptionFragment
         extends BaseFeatureFragment<ItemGetContract.Presenter, MakeupOptionFragment.IMakeupOptionCallback>
-        implements ButtonViewRVAdapter.OnItemClickListener, View.OnClickListener, ItemGetContract.View {
+        implements ButtonViewRVAdapter.OnItemClickListener, ItemGetContract.View {
     private RecyclerView rv;
-    private ImageView ivClose;
 
     @Nullable
     @Override
@@ -36,9 +35,6 @@ public class MakeupOptionFragment
         setPresenter(new ItemGetPresenter());
 
         rv = view.findViewById(R.id.rv_makeup_option);
-        ivClose = view.findViewById(R.id.iv_close_makeup_option);
-        ivClose.setOnClickListener(this);
-
         rv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
     }
 
@@ -49,7 +45,7 @@ public class MakeupOptionFragment
                 public void run() {
                     setMakeupType(type, select);
                 }
-            }, 100);
+            }, 16);
             return;
         }
 
@@ -65,24 +61,16 @@ public class MakeupOptionFragment
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.iv_close_makeup_option:
-                getCallback().onCloseClick();
-                break;
-        }
-    }
-
-    @Override
     public void onItemClick(ButtonItem item) {
+        if (getCallback() == null) {
+            return;
+        }
         getCallback().onOptionSelect(item.getNode(), ((ButtonViewRVAdapter)rv.getAdapter()).getSelect());
     }
 
     interface IMakeupOptionCallback {
-        /**
-         * 点击关闭按钮，收起当前的 MakeupOptionFragment
-         */
-        void onCloseClick();
+
+        void onDefaultClick();
 
         /**
          * 点击某一项之后，回调给 EffectFragment 处理

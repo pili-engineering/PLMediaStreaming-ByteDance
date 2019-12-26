@@ -9,6 +9,7 @@ import android.util.Log;
 import com.bytedance.labcv.effectsdk.library.LogUtils;
 
 
+
 public class CameraProxy {
     private static final String TAG = "CameraProxy";
     private boolean isDebug = true;
@@ -19,8 +20,7 @@ public class CameraProxy {
 
     public CameraProxy(Context context) {
         mContext = context;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-                && Camera2EnableConfig.CAM2_ENABLE_LIST.contains(Build.MODEL.toLowerCase())) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mCamera = new Camera2();
         } else {
             mCamera = new Camera1();
@@ -33,14 +33,14 @@ public class CameraProxy {
         return mCamera.currentValid();
     }
 
-    public boolean openCamera(int cameraId, final CameraListener listener) {
+    public boolean openCamera(final int cameraId, final CameraListener listener) {
         try {
-            mCameraId = cameraId;
             mCamera.open(cameraId, new CameraListener() {
                 @Override
                 public void onOpenSuccess() {
                     mCamera.initCameraParam();
                     listener.onOpenSuccess();
+                    mCameraId = cameraId;
                 }
 
                 @Override
@@ -57,14 +57,14 @@ public class CameraProxy {
         return true;
     }
 
-    public void changeCamera(int cameraId, final CameraListener listener) {
+    public void changeCamera(final int cameraId, final CameraListener listener) {
         try {
-            mCameraId = cameraId;
             mCamera.changeCamera(cameraId, new CameraListener() {
                 @Override
                 public void onOpenSuccess() {
                     mCamera.initCameraParam();
                     listener.onOpenSuccess();
+                    mCameraId = cameraId;
                 }
 
                 @Override
@@ -89,6 +89,9 @@ public class CameraProxy {
 
     public long getTimeStamp()
     {
+        if (textureHolder.getSurfaceTexture() == null) {
+            return System.currentTimeMillis();
+        }
         return textureHolder.getSurfaceTexture().getTimestamp();
     }
 
@@ -129,10 +132,6 @@ public class CameraProxy {
 
     public int getPreviewTexture() {
         return textureHolder.getmSurfaceTextureID();
-    }
-
-    public long getTextureTime(){
-        return textureHolder.getSurfaceTexture().getTimestamp();
     }
 
 }

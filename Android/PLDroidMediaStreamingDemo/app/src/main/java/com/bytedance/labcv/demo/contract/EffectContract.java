@@ -31,6 +31,13 @@ public interface EffectContract {
         abstract public void removeNodesOfType(SparseArray<ComposerNode> composerNodeMap, int type);
 
         /**
+         * 移除某一种类型的 progress，逻辑同 removeNodesOfType
+         * @param progressMap map
+         * @param type type
+         */
+        abstract public void removeProgressInMap(SparseArray<Float> progressMap, int type);
+
+        /**
          * 根据 composer node map 生成 composer nodes
          * Generate composer nodes based on the composer node map
          * @param composerNodeMap composer node map
@@ -38,5 +45,25 @@ public interface EffectContract {
          *          Returns a String array that stores all the composer node's paths, namely {@link ComposerNode#getNode()}
          */
         abstract public String[] generateComposerNodes(SparseArray<ComposerNode> composerNodeMap);
+
+        /**
+         * 设置美颜默认值
+         * @param composerNodeMap composer node map
+         */
+        abstract public void generateDefaultBeautyNodes(SparseArray<ComposerNode> composerNodeMap);
+
+        /**
+         * 获取某一功能默认值
+         * @param type 功能 id
+         * @return 默认值
+         */
+        abstract public float getDefaultValue(int type);
+
+        /**
+         * 判断某一个功能是否有强度调节
+         * @param type 功能 id
+         * @return true 可以调节强度 false 不可以调节
+         */
+        abstract public boolean hasIntensity(int type);
     }
 }

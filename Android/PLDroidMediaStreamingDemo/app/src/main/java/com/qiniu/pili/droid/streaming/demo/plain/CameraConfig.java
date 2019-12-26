@@ -10,7 +10,7 @@ public class CameraConfig implements Serializable {
     public CameraStreamingSetting.PREVIEW_SIZE_RATIO mSizeRatio;
     public String mFocusMode;
     public boolean mIsFaceBeautyEnabled;
-    public boolean mIsCustomFaceBeauty = false;
+    public boolean mIsCustomFaceBeauty = true;
     public boolean mContinuousAutoFocus;
     public boolean mPreviewMirror;
     public boolean mEncodingMirror;

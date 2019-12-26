@@ -3,12 +3,11 @@ package com.bytedance.labcv.demo.camera;
 import android.graphics.SurfaceTexture;
 import android.opengl.GLES20;
 
-import com.bef.effectsdk.OpenGLUtils;
 import com.bytedance.labcv.demo.opengl.GlUtil;
 
 
 public class TextureHolder {
-    protected int mSurfaceTextureID = OpenGLUtils.NO_TEXTURE;
+    protected int mSurfaceTextureID = GlUtil.NO_TEXTURE;
     protected SurfaceTexture mSurfaceTexture;
     private float mMPV[] = new float[16];
 
@@ -34,10 +33,10 @@ public class TextureHolder {
             mSurfaceTexture = null;
         }
 
-        if (mSurfaceTextureID != OpenGLUtils.NO_TEXTURE) {
+        if (mSurfaceTextureID != GlUtil.NO_TEXTURE) {
             GLES20.glDeleteTextures(1, new int[]{mSurfaceTextureID}, 0);
         }
-        mSurfaceTextureID = OpenGLUtils.NO_TEXTURE;
+        mSurfaceTextureID = GlUtil.NO_TEXTURE;
     }
 
     public void updateTexImage() {

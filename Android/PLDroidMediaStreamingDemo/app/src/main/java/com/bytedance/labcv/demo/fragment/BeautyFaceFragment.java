@@ -9,19 +9,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bytedance.labcv.demo.MainActivity;
+import com.qiniu.pili.droid.streaming.demo.R;
 import com.bytedance.labcv.demo.adapter.ButtonViewRVAdapter;
 import com.bytedance.labcv.demo.contract.ItemGetContract;
 import com.bytedance.labcv.demo.contract.presenter.ItemGetPresenter;
 import com.bytedance.labcv.demo.model.ButtonItem;
-import com.qiniu.pili.droid.streaming.demo.R;
-import com.qiniu.pili.droid.streaming.effect.OnCloseListener;
 
 import java.util.List;
 
+import static com.bytedance.labcv.demo.contract.ItemGetContract.MASK;
+
 public class BeautyFaceFragment extends BaseFeatureFragment<ItemGetContract.Presenter, BeautyFaceFragment.IBeautyCallBack>
-        implements EffectFragment.IProgressCallback, OnCloseListener, ButtonViewRVAdapter.OnItemClickListener, ItemGetContract.View {
+        implements EffectFragment.IProgressCallback, MainActivity.OnCloseListener, ButtonViewRVAdapter.OnItemClickListener, ItemGetContract.View {
     private RecyclerView rv;
     private int mType;
+    private MainActivity.ICheckAvailableCallback mCheckAvailableCallback;
 
     public interface IBeautyCallBack {
         void onBeautySelect(ButtonItem item);
@@ -41,12 +43,18 @@ public class BeautyFaceFragment extends BaseFeatureFragment<ItemGetContract.Pres
         rv = view.findViewById(R.id.rv_beauty);
         List<ButtonItem> items = mPresenter.getItems(mType);
         ButtonViewRVAdapter adapter = new ButtonViewRVAdapter(items, this);
+        adapter.setCheckAvailableCallback(mCheckAvailableCallback);
         rv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         rv.setAdapter(adapter);
     }
 
     public BeautyFaceFragment setType(final int type) {
         mType = type;
+        return this;
+    }
+
+    public BeautyFaceFragment setCheckAvailableCallback(MainActivity.ICheckAvailableCallback checkAvailableCallback) {
+        mCheckAvailableCallback = checkAvailableCallback;
         return this;
     }
 
@@ -57,7 +65,29 @@ public class BeautyFaceFragment extends BaseFeatureFragment<ItemGetContract.Pres
 
     @Override
     public void onProgress(float progress) {
+        if (rv == null || rv.getAdapter() == null) return;
         ((ButtonViewRVAdapter)rv.getAdapter()).onProgress(progress);
+    }
+
+    @Override
+    public void onProgress(float progress, int id) {
+        if (rv == null || rv.getAdapter() == null) return;
+        ((ButtonViewRVAdapter)rv.getAdapter()).onProgress(progress, id);
+    }
+
+    @Override
+    public int getSelect() {
+        return ((ButtonViewRVAdapter)rv.getAdapter()).getSelect();
+    }
+
+    @Override
+    public void setSelect(int select) {
+        ((ButtonViewRVAdapter)rv.getAdapter()).setSelect(select);
+    }
+
+    @Override
+    public void setSelectItem(int id) {
+        ((ButtonViewRVAdapter)rv.getAdapter()).setSelectItem(id);
     }
 
     @Override

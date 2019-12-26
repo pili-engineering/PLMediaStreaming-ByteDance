@@ -16,12 +16,6 @@ import com.bytedance.labcv.demo.contract.presenter.WelcomePresenter;
 import com.bytedance.labcv.demo.utils.CommonUtils;
 import com.qiniu.pili.droid.streaming.demo.MainActivity;
 import com.qiniu.pili.droid.streaming.demo.R;
-import com.qiniu.pili.droid.streaming.effect.BeautyImportStreamingActivity;
-import com.qiniu.pili.droid.streaming.effect.PLVideoViewActivity;
-
-import static com.qiniu.pili.droid.streaming.effect.utils.Config.ROOM_NUMBER;
-import static com.qiniu.pili.droid.streaming.effect.utils.Utils.requestPlayUrl;
-import static com.qiniu.pili.droid.streaming.effect.utils.Utils.requestPublishUrl;
 
 /**
  * 欢迎界面
@@ -30,7 +24,6 @@ public class WelcomeActivity extends BaseActivity<WelcomeContract.Presenter>
         implements WelcomeContract.View {
     private TextView mTvVersion;
     private Button mBtStart;
-    private Button mBtQiNiu;
     private ProgressBar mProgressBar;
 
     @Override
@@ -45,29 +38,21 @@ public class WelcomeActivity extends BaseActivity<WelcomeContract.Presenter>
             mPresenter.startTask();
         } else {
             mBtStart.setEnabled(true);
-            mBtQiNiu.setEnabled(true);
         }
     }
 
     private void initView() {
-        mTvVersion = (TextView) findViewById(R.id.tv_version);
-        mBtStart = (Button) findViewById(R.id.bt_start);
-        mProgressBar = (ProgressBar) findViewById(R.id. progress);
+        mTvVersion = findViewById(R.id.tv_version);
+        mBtStart = findViewById(R.id.bt_start);
+        mProgressBar = findViewById(R.id.progress);
         mBtStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (CommonUtils.isFastClick()) {
                     return;
                 }
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Intent intent = new Intent(WelcomeActivity.this, BeautyImportStreamingActivity.class);
-                        String publishUrl = requestPublishUrl(ROOM_NUMBER);
-                        intent.putExtra("stream_publish_url", publishUrl);
-                        startActivity(intent);
-                    }
-                }).start();
+                Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
         // 增加隐藏功能：长按重新加载资源，避免更换资源后要重装应用
@@ -81,26 +66,6 @@ public class WelcomeActivity extends BaseActivity<WelcomeContract.Presenter>
             }
         });
         mTvVersion.setText(mPresenter.getVersionName());
-
-        mBtQiNiu = (Button) findViewById(R.id.bt_qiniu);
-        mBtQiNiu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (CommonUtils.isFastClick()) {
-                    return;
-                }
-
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        String playUrl = requestPlayUrl(ROOM_NUMBER);
-                        Intent intent = new Intent(WelcomeActivity.this, PLVideoViewActivity.class);
-                        intent.putExtra("videoPath", playUrl);
-                        startActivity(intent);
-                    }
-                }).start();
-            }
-        });
     }
 
     @Override
@@ -118,7 +83,6 @@ public class WelcomeActivity extends BaseActivity<WelcomeContract.Presenter>
         if (result) {
             mBtStart.setText(getString(R.string.start));
             mBtStart.setEnabled(true);
-            mBtQiNiu.setEnabled(true);
         } else {
             Toast.makeText(this, getString(R.string.resource_ready), Toast.LENGTH_LONG).show();
         }

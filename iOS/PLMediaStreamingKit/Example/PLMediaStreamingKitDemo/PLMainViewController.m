@@ -71,7 +71,7 @@ UIAlertViewDelegate
     [alertView show];
     
     _vcEffect = [[BEVideoRecorderViewController alloc] init];
-    [_vcEffect initProcessor:CGSizeMake(1080, 1920)];
+    [_vcEffect initProcessor];
     [self.view addSubview:_vcEffect.view];
     [_vcEffect.view mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.view);
@@ -103,12 +103,12 @@ UIAlertViewDelegate
     [self _prepareForCameraSetting];
 //    [self _prepareButtons];
     
-    _panelDelegateGenerator = [[PLPanelDelegateGenerator alloc] initWithMediaStreamingSession:_streamingSession];
-    [_panelDelegateGenerator generate];
-    _panelDelegateGenerator.delegate = self;
-    
-    _modelPanelGenerator = [[PLModelPanelGenerator alloc] initWithMediaStreamingSession:_streamingSession panelDelegateGenerator:_panelDelegateGenerator];
-    self.panelModels = [_modelPanelGenerator generate];
+//    _panelDelegateGenerator = [[PLPanelDelegateGenerator alloc] initWithMediaStreamingSession:_streamingSession];
+//    [_panelDelegateGenerator generate];
+//    _panelDelegateGenerator.delegate = self;
+//    
+//    _modelPanelGenerator = [[PLModelPanelGenerator alloc] initWithMediaStreamingSession:_streamingSession panelDelegateGenerator:_panelDelegateGenerator];
+//    self.panelModels = [_modelPanelGenerator generate];
     
     [self _pressedStartButton:_startButton];
 }
@@ -165,7 +165,7 @@ UIAlertViewDelegate
 //        }
         
 //        NSURL *streamURL = [NSURL URLWithString:[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
-        NSURL *streamURL = [NSURL URLWithString:@"rtmp://pili-publish.qnsdk.com/sdk-live/aa"];
+        NSURL *streamURL = [NSURL URLWithString:@"rtmp://pili-publish.qnsdk.com/sdk-live/test_pili"];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             NSString *streamURLString = streamURL.absoluteString;
@@ -501,8 +501,13 @@ UIAlertViewDelegate
     }
 }
 
-- (CVPixelBufferRef)process:(CVPixelBufferRef)pixelBuffer {
+
+- (CVPixelBufferRef)mediaStreamingSession:(PLMediaStreamingSession *)session cameraSourceDidGetPixelBuffer:(CVPixelBufferRef)pixelBuffer {
     return [_vcEffect process:pixelBuffer timeStamp:0];
+}
+
+- (void)mediaStreamingSession:(PLMediaStreamingSession *)session streamStatusDidUpdate:(PLStreamStatus *)status {
+    NSLog(@"mediaStreamingSession");
 }
 
 @end

@@ -384,12 +384,10 @@ public class Camera2 implements CameraInterface {
         if (ret != null) {
             int exactWidth = -1, exactHeight = -1;
             int bestWidth = -1, bestHeight = -1;
-            double exactRatio = (double) 16 / 9;
             for (Size size : ret) {
                 int width = size.getWidth();
                 int height = size.getHeight();
-                double ratio = (double) width / height;
-                if (ratio == exactRatio) {
+                if (width == 1280 && height == 720) {
                     exactHeight = height;
                     exactWidth = width;
                     break;
@@ -472,11 +470,13 @@ public class Camera2 implements CameraInterface {
 
     @Override
     public int getOrientation() {
+        if (cameraInfo == null) return 0;
         return cameraInfo.get(CameraCharacteristics.SENSOR_ORIENTATION);
     }
 
     @Override
     public boolean isFlipHorizontal() {
+        if (cameraInfo == null) return true;
         int cameraId = cameraInfo.get(CameraCharacteristics.LENS_FACING);
         return cameraId == CameraCharacteristics.LENS_FACING_FRONT;
     }

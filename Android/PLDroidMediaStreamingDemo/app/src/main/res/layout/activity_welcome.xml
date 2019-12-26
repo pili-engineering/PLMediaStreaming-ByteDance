@@ -10,11 +10,11 @@
 
     <ImageView
         android:id="@+id/icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="150dp"
-        android:visibility="gone"
+
         android:src="@mipmap/ic_launcher" />
 
     <TextView
@@ -27,7 +27,6 @@
         android:layout_below="@id/icon"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="26dp"
-        android:visibility="gone"
         android:textColor="@color/colorUnChecked"/>
 
     <TextView
@@ -40,35 +39,19 @@
         android:layout_below="@id/product"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="6dp"
-        android:visibility="gone"
         android:textColor="@color/colorUnChecked"/>
 
     <Button
         android:id="@+id/bt_start"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/logo"
-        android:layout_marginTop="60dp"
+        android:layout_marginBottom="60dp"
         android:text="@string/start"
         android:textColor="@android:color/white"
         android:background="@drawable/login_button_selector"
         android:enabled="false"/>
-
-      <Button
-        android:id="@+id/bt_qiniu"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/bt_start"
-          android:layout_marginTop="10dp"
-        android:text="@string/play"
-        android:textColor="@android:color/white"
-        android:background="@drawable/login_button_selector"
-        android:enabled="false"/>
-
-
     <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
         android:id="@+id/progress"
         android:layout_width="200dp"
@@ -96,7 +79,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
         tools:text="v1.0"
-        android:visibility="gone"
         android:textSize="16dp"
         android:textStyle="bold"
         android:textColor="@android:color/darker_gray"/>

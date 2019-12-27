@@ -68,7 +68,7 @@ DEPENDENCIES:
   - ZLPhotoBrowser
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  https://github.com/cocoapods/specs.git:
     - AFNetworking
     - BlocksKit
     - Bugly
@@ -107,4 +107,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 5bedcf061d96a1cc07fec5fd58dcea341e073a46
 
-COCOAPODS: 1.8.3
+COCOAPODS: 1.7.2

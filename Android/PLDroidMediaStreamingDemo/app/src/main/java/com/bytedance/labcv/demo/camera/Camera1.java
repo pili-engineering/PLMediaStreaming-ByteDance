@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
+
 import com.bytedance.labcv.demo.camera.focus.FocusStrategy;
 import com.bytedance.labcv.demo.camera.focus.FocusStrategyFactory;
 import com.bytedance.labcv.demo.utils.RectUtils;
@@ -18,6 +19,7 @@ import com.bytedance.labcv.effectsdk.library.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 
 public class Camera1 implements CameraInterface {
@@ -337,21 +339,15 @@ public class Camera1 implements CameraInterface {
         if (ret != null) {
             int exactWidth = -1, exactHeight = -1;
             int bestWidth = -1, bestHeight = -1;
-            double exactRatio = (double) 16 / 9;
             for (Camera.Size size : ret) {
                 int width = size.width;
                 int height = size.height;
-                double ratio = (double) width / height;
-                if (ratio == exactRatio) {
+
+                if (width == 1280 && height == 720) {
                     exactHeight = height;
                     exactWidth = width;
                     break;
                 }
-//                if (width == 1280 && height == 720) {
-//                    exactHeight = height;
-//                    exactWidth = width;
-//                    break;
-//                }
                 /*
                  * 所有手机都支持 4:3 和16:9的分辨率
                  * 如果没有1280*720的, 选取1000以下的最大的(包括720*480)

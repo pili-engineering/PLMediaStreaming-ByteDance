@@ -15,59 +15,41 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bytedance.labcv.demo.MainActivity;
+import com.qiniu.pili.droid.streaming.demo.R;
 import com.bytedance.labcv.demo.adapter.FragmentVPAdapter;
 import com.bytedance.labcv.demo.adapter.OnPageChangeListenerAdapter;
 import com.bytedance.labcv.demo.contract.EffectContract;
+import com.bytedance.labcv.demo.contract.ItemGetContract;
 import com.bytedance.labcv.demo.contract.presenter.EffectPresenter;
 import com.bytedance.labcv.demo.model.ButtonItem;
 import com.bytedance.labcv.demo.model.ComposerNode;
 import com.bytedance.labcv.demo.view.ProgressBar;
 import com.bytedance.labcv.effectsdk.library.LogUtils;
-import com.qiniu.pili.droid.streaming.demo.R;
-import com.qiniu.pili.droid.streaming.effect.OnCloseListener;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.bytedance.labcv.demo.contract.ItemGetContract.MASK;
+import static com.bytedance.labcv.demo.contract.ItemGetContract.OFFSET;
 import static com.bytedance.labcv.demo.contract.ItemGetContract.TYPE_BEAUTY_BODY;
-import static com.bytedance.labcv.demo.contract.ItemGetContract.TYPE_BEAUTY_BODY_LONG_LEG;
-import static com.bytedance.labcv.demo.contract.ItemGetContract.TYPE_BEAUTY_BODY_THIN;
 import static com.bytedance.labcv.demo.contract.ItemGetContract.TYPE_BEAUTY_FACE;
-import static com.bytedance.labcv.demo.contract.ItemGetContract.TYPE_BEAUTY_FACE_SHARPEN;
-import static com.bytedance.labcv.demo.contract.ItemGetContract.TYPE_BEAUTY_FACE_SMOOTH;
-import static com.bytedance.labcv.demo.contract.ItemGetContract.TYPE_BEAUTY_FACE_WHITEN;
 import static com.bytedance.labcv.demo.contract.ItemGetContract.TYPE_BEAUTY_RESHAPE;
-import static com.bytedance.labcv.demo.contract.ItemGetContract.TYPE_BEAUTY_RESHAPE_CHEEK;
-import static com.bytedance.labcv.demo.contract.ItemGetContract.TYPE_BEAUTY_RESHAPE_CHIN;
-import static com.bytedance.labcv.demo.contract.ItemGetContract.TYPE_BEAUTY_RESHAPE_DARK;
-import static com.bytedance.labcv.demo.contract.ItemGetContract.TYPE_BEAUTY_RESHAPE_DECREE;
-import static com.bytedance.labcv.demo.contract.ItemGetContract.TYPE_BEAUTY_RESHAPE_EYE;
-import static com.bytedance.labcv.demo.contract.ItemGetContract.TYPE_BEAUTY_RESHAPE_EYE_ROTATE;
-import static com.bytedance.labcv.demo.contract.ItemGetContract.TYPE_BEAUTY_RESHAPE_FACE_CUT;
-import static com.bytedance.labcv.demo.contract.ItemGetContract.TYPE_BEAUTY_RESHAPE_FACE_OVERALL;
-import static com.bytedance.labcv.demo.contract.ItemGetContract.TYPE_BEAUTY_RESHAPE_FACE_SMALL;
-import static com.bytedance.labcv.demo.contract.ItemGetContract.TYPE_BEAUTY_RESHAPE_FOREHEAD;
-import static com.bytedance.labcv.demo.contract.ItemGetContract.TYPE_BEAUTY_RESHAPE_JAW;
-import static com.bytedance.labcv.demo.contract.ItemGetContract.TYPE_BEAUTY_RESHAPE_MOUTH_SMILE;
-import static com.bytedance.labcv.demo.contract.ItemGetContract.TYPE_BEAUTY_RESHAPE_MOUTH_ZOOM;
-import static com.bytedance.labcv.demo.contract.ItemGetContract.TYPE_BEAUTY_RESHAPE_NOSE_LEAN;
-import static com.bytedance.labcv.demo.contract.ItemGetContract.TYPE_BEAUTY_RESHAPE_NOSE_LONG;
 import static com.bytedance.labcv.demo.contract.ItemGetContract.TYPE_CLOSE;
 import static com.bytedance.labcv.demo.contract.ItemGetContract.TYPE_FILTER;
 import static com.bytedance.labcv.demo.contract.ItemGetContract.TYPE_MAKEUP;
+import static com.bytedance.labcv.demo.contract.ItemGetContract.TYPE_MAKEUP_HAIR;
 import static com.bytedance.labcv.demo.contract.ItemGetContract.TYPE_MAKEUP_OPTION;
 
-public class EffectFragment extends BaseFeatureFragment<EffectContract.Presenter, EffectFragment.IEffectCallback>
-        implements OnCloseListener, MakeupOptionFragment.IMakeupOptionCallback, EffectContract.View {
+public class EffectFragment extends
+        BaseFeatureFragment<EffectContract.Presenter, EffectFragment.IEffectCallback>
+        implements MainActivity.OnCloseListener, MakeupOptionFragment.IMakeupOptionCallback,
+        EffectContract.View, ItemGetContract.View, View.OnClickListener {
     public static final int POSITION_BEAUTY = 0;
     public static final int POSITION_RESHAPE = 1;
     public static final int POSITION_BODY = 2;
@@ -79,61 +61,39 @@ public class EffectFragment extends BaseFeatureFragment<EffectContract.Presenter
 
     public static final float NO_VALUE = -1F;
     public static final int NO_POSITION = -1;
-    public static final Map<Integer, Float> DEFAULT_VALUE;
-    static {
-        @SuppressLint("UseSparseArrays") Map<Integer, Float> map = new HashMap<>();
-        // 美颜
-        map.put(TYPE_BEAUTY_FACE_SMOOTH, 0.4F);
-        map.put(TYPE_BEAUTY_FACE_WHITEN, 0.4F);
-        map.put(TYPE_BEAUTY_FACE_SHARPEN, 0.4F);
-        // 美型
-        map.put(TYPE_BEAUTY_RESHAPE_FACE_OVERALL, 0.4F);
-        map.put(TYPE_BEAUTY_RESHAPE_FACE_SMALL, 0.4F);
-        map.put(TYPE_BEAUTY_RESHAPE_FACE_CUT, 0.4F);
-        map.put(TYPE_BEAUTY_RESHAPE_EYE, 0.4F);
-        map.put(TYPE_BEAUTY_RESHAPE_EYE_ROTATE, 0.4F);
-        map.put(TYPE_BEAUTY_RESHAPE_CHEEK, 0.4F);
-        map.put(TYPE_BEAUTY_RESHAPE_JAW, 0.4F);
-        map.put(TYPE_BEAUTY_RESHAPE_NOSE_LEAN, 0.4F);
-        map.put(TYPE_BEAUTY_RESHAPE_NOSE_LONG, 0.4F);
-        map.put(TYPE_BEAUTY_RESHAPE_CHIN, 0.4F);
-        map.put(TYPE_BEAUTY_RESHAPE_FOREHEAD, 0.4F);
-        map.put(TYPE_BEAUTY_RESHAPE_MOUTH_ZOOM, 0.4F);
-        map.put(TYPE_BEAUTY_RESHAPE_MOUTH_SMILE, 0.4F);
-        map.put(TYPE_BEAUTY_RESHAPE_DECREE, 0.4F);
-        map.put(TYPE_BEAUTY_RESHAPE_DARK, 0.4F);
-        map.put(TYPE_BEAUTY_BODY_THIN, 0.4f);
-        map.put(TYPE_BEAUTY_BODY_LONG_LEG, 0.4f);
-        // 滤镜
-        map.put(TYPE_FILTER, 0.5F);
-        DEFAULT_VALUE = Collections.unmodifiableMap(map);
-    }
 
     // view
     private ProgressBar pb;
-    private ImageView ivNormal;
+//    private ImageView ivNormal;
+//    private ImageView ivDefault;
+    private Button btnNormal;
+    private Button btnDefault;
     private TabLayout tl;
     private TextView tvTitle;
+    private ImageView ivCloseMakeupOption;
     private ViewPager vp;
 
-    // fragment 列表
     private List<Fragment> mFragmentList;
     // 当前选择的效果类型，如磨皮等
-    private int mSelectType = -1;
-    // 当前所处的 ViewPager 位置
-    private int mLastPage = 0;
-    // 当前显示的 Fragment
+    // current effect type
+    private int mSelectType = TYPE_CLOSE;
+    private int mSavedSelectType;
+    // current fragment
     private IProgressCallback mSelectFragment;
-    // 美颜效果强度表
-    private SparseArray<Float> mBeautyProgressMap = new SparseArray<>();
-    // 美妆效果强度表
-    private SparseArray<Float> mMakeupProgressMap = new SparseArray<>();
+    // 效果强度表
+    private SparseArray<Float> mProgressMap = new SparseArray<>();
     // 每一个 Fragment 中选中的效果
+    // Selected effect in each Fragment
     private SparseIntArray mTypeMap = new SparseIntArray();
     // 每一个美妆效果选中的类型，如口红的胡萝卜红
+    // Each selected makeup effect of selected type
     private SparseIntArray mMakeupOptionSelectMap = new SparseIntArray();
     // 所有选中的效果集合
+    // all selected effect
     private SparseArray<ComposerNode> mComposerNodeMap = new SparseArray<>();
+
+    private String mSavedFilterPath;
+    private MainActivity.ICheckAvailableCallback mCheckAvailableCallback;
 
     @Nullable
     @Override
@@ -145,12 +105,17 @@ public class EffectFragment extends BaseFeatureFragment<EffectContract.Presenter
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        view.setVisibility(View.GONE);
         setPresenter(new EffectPresenter());
 
         pb = view.findViewById(R.id.pb_effect);
-        ivNormal = view.findViewById(R.id.iv_normal_effect);
+//        ivNormal = view.findViewById(R.id.iv_normal_effect);
+//        ivDefault = view.findViewById(R.id.iv_default_beauty);
+        btnNormal = view.findViewById(R.id.btn_normal);
+        btnDefault = view.findViewById(R.id.btn_default);
         tl = view.findViewById(R.id.tl_identify);
         tvTitle = view.findViewById(R.id.tv_title_identify);
+        ivCloseMakeupOption = view.findViewById(R.id.iv_close_makeup_option);
         vp = view.findViewById(R.id.vp_identify);
 
         pb.setOnProgressChangedListener(new ProgressBar.OnProgressChangedListener() {
@@ -162,7 +127,7 @@ public class EffectFragment extends BaseFeatureFragment<EffectContract.Presenter
             }
         });
 
-        ivNormal.setOnTouchListener(new View.OnTouchListener() {
+        btnNormal.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
@@ -174,10 +139,21 @@ public class EffectFragment extends BaseFeatureFragment<EffectContract.Presenter
                         onNormalUp();
                         break;
                 }
-                return true;
+                return false;
             }
         });
+        btnDefault.setOnClickListener(this);
+        ivCloseMakeupOption.setOnClickListener(this);
         initVP();
+
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                if (EffectFragment.this != null) {
+                    EffectFragment.this.onDefaultClick();
+                }
+            }
+        });
     }
 
     private void initVP() {
@@ -185,11 +161,14 @@ public class EffectFragment extends BaseFeatureFragment<EffectContract.Presenter
         List<String> titleList = new ArrayList<>();
 
         // 美颜
-        mFragmentList.add(new BeautyFaceFragment().setType(TYPE_BEAUTY_FACE).setCallback(new BeautyFaceFragment.IBeautyCallBack() {
+        // beauty face
+        mFragmentList.add(new BeautyFaceFragment().setType(TYPE_BEAUTY_FACE)
+                .setCheckAvailableCallback(mCheckAvailableCallback).setCallback(new BeautyFaceFragment.IBeautyCallBack() {
             @Override
             public void onBeautySelect(ButtonItem item) {
                 int type = item.getNode().getId();
                 mSelectType = type;
+                mTypeMap.put(POSITION_BEAUTY, mSelectType);
                 if (type == TYPE_CLOSE) {
                     closeBeautyFace();
                     return;
@@ -199,9 +178,9 @@ public class EffectFragment extends BaseFeatureFragment<EffectContract.Presenter
                     mComposerNodeMap.put(type, item.getNode());
                     updateComposerNodes();
                 }
-                float progress = mBeautyProgressMap.get(type, NO_VALUE);
+                float progress = mProgressMap.get(type, NO_VALUE);
                 if (progress == NO_VALUE) {
-                    dispatchProgress(DEFAULT_VALUE.get(mSelectType));
+                    dispatchProgress(mPresenter.getDefaultValue(mSelectType));
                 } else {
                     dispatchProgress(progress);
                 }
@@ -210,11 +189,14 @@ public class EffectFragment extends BaseFeatureFragment<EffectContract.Presenter
         titleList.add(getString(R.string.tab_face_beautification));
 
         // 美形
-        mFragmentList.add(new BeautyFaceFragment().setType(TYPE_BEAUTY_RESHAPE).setCallback(new BeautyFaceFragment.IBeautyCallBack() {
+        // beauty reshape
+        mFragmentList.add(new BeautyFaceFragment().setType(TYPE_BEAUTY_RESHAPE)
+                .setCheckAvailableCallback(mCheckAvailableCallback).setCallback(new BeautyFaceFragment.IBeautyCallBack() {
             @Override
             public void onBeautySelect(ButtonItem item) {
                 int type = item.getNode().getId();
                 mSelectType = type;
+                mTypeMap.put(POSITION_RESHAPE, mSelectType);
                 if (type == TYPE_CLOSE) {
                     closeBeautyReshape();
                     return;
@@ -224,9 +206,9 @@ public class EffectFragment extends BaseFeatureFragment<EffectContract.Presenter
                     mComposerNodeMap.put(type, item.getNode());
                     updateComposerNodes();
                 }
-                float progress = mMakeupProgressMap.get(type, NO_VALUE);
+                float progress = mProgressMap.get(type, NO_VALUE);
                 if (progress == NO_VALUE) {
-                    dispatchProgress(DEFAULT_VALUE.get(mSelectType));
+                    dispatchProgress(mPresenter.getDefaultValue(mSelectType));
                 } else {
                     dispatchProgress(progress);
                 }
@@ -235,11 +217,14 @@ public class EffectFragment extends BaseFeatureFragment<EffectContract.Presenter
         titleList.add(getString(R.string.tab_face_beauty_reshape));
 
         // 美体
-        mFragmentList.add(new BeautyFaceFragment().setType(TYPE_BEAUTY_BODY).setCallback(new BeautyFaceFragment.IBeautyCallBack() {
+        // beauty body
+        mFragmentList.add(new BeautyFaceFragment().setType(TYPE_BEAUTY_BODY)
+                .setCheckAvailableCallback(mCheckAvailableCallback).setCallback(new BeautyFaceFragment.IBeautyCallBack() {
             @Override
             public void onBeautySelect(ButtonItem item) {
                 int type = item.getNode().getId();
                 mSelectType = type;
+                mTypeMap.put(POSITION_BODY, mSelectType);
                 if (type == TYPE_CLOSE) {
                     closeBeautyBody();
                     return;
@@ -249,22 +234,30 @@ public class EffectFragment extends BaseFeatureFragment<EffectContract.Presenter
                     mComposerNodeMap.put(type, item.getNode());
                     updateComposerNodes();
                 }
-                dispatchProgress(DEFAULT_VALUE.get(mSelectType));
-
-
-
+                dispatchProgress(mPresenter.getDefaultValue(mSelectType));
             }
         }));
         titleList.add(getString(R.string.tab_face_beauty_body));
 
         // 美妆
-        mFragmentList.add(new BeautyFaceFragment().setType(TYPE_MAKEUP).setCallback(new BeautyFaceFragment.IBeautyCallBack() {
+        // make
+        mFragmentList.add(new BeautyFaceFragment().setType(TYPE_MAKEUP)
+                .setCheckAvailableCallback(mCheckAvailableCallback).setCallback(new BeautyFaceFragment.IBeautyCallBack() {
             @Override
             public void onBeautySelect (ButtonItem item) {
                 mSelectType = item.getNode().getId();
+                mTypeMap.put(POSITION_MAKEUP, mSelectType);
                 if (mSelectType == TYPE_CLOSE) {
                     closeMakeup();
                     return;
+                }
+
+                // 染发栏不显示滑杆
+                if (item.getNode().getId() == TYPE_MAKEUP_HAIR) {
+                    pb.setVisibility(View.INVISIBLE);
+                } else {
+                    pb.setVisibility(View.VISIBLE);
+                    pb.setProgress(mProgressMap.get(mSelectType, 0F));
                 }
 
                 tvTitle.setText(item.getTitle());
@@ -273,13 +266,21 @@ public class EffectFragment extends BaseFeatureFragment<EffectContract.Presenter
         }));
         titleList.add(getString(R.string.tab_face_makeup));
         // 滤镜
-        mFragmentList.add(new FilterFragment().setCallback(new FilterFragment.IFilterCallback() {
+        // filter
+        mFragmentList.add(new FilterFragment()
+                .setCheckAvailableCallback(mCheckAvailableCallback)
+                .setCallback(new FilterFragment.IFilterCallback() {
             @Override
             public void onFilterSelected(File file) {
                 mSelectType = TYPE_FILTER;
+                mTypeMap.put(POSITION_FILTER, TYPE_FILTER);
+                mSavedFilterPath = file == null ? null : file.getAbsolutePath();
+                if (getCallback() == null) {
+                    return;
+                }
                 getCallback().onFilterSelected(file);
                 // 选中滤镜之后初始化强度
-                dispatchProgress(DEFAULT_VALUE.get(mSelectType));
+                dispatchProgress(mPresenter.getDefaultValue(mSelectType));
             }
         }));
         titleList.add(getString(R.string.tab_filter));
@@ -292,50 +293,55 @@ public class EffectFragment extends BaseFeatureFragment<EffectContract.Presenter
         vp.addOnPageChangeListener(new OnPageChangeListenerAdapter() {
             @Override
             public void onPageSelected(int position) {
-                mSelectFragment = (IProgressCallback) mFragmentList.get(position);
+                mSelectType = mTypeMap.get(position, TYPE_CLOSE);
+                pb.setProgress(mProgressMap.get(mSelectType, NO_VALUE));
 
-                // 为了实现用户切换不同的 Fragment 时 ProgressBar 也能跟着切换，需要使用 mTypeMap 保存
-                // 用户在每一个 Fragment 中选中的开关，然后再根据开关从 mProgressMap 找到这个开关对应的进度，
-                // 再将其设置到 ProgressBar 中
-                mTypeMap.put(mLastPage, mSelectType);
-                mSelectType = mTypeMap.get(position, NO_POSITION);
-                pb.setProgress(getProgressWithType(mSelectType));
-                mLastPage = position;
+                if (mFragmentList.get(position) instanceof IProgressCallback) {
+                    mSelectFragment = (IProgressCallback) mFragmentList.get(position);
+                }
 
-                showOrHideProgressBar(position != POSITION_MAKEUP && position != POSITION_BODY);
+//                showOrHideProgressBar(position != POSITION_MAKEUP && position != POSITION_BODY);
+                showOrHideProgressBar(position != POSITION_BODY);
             }
         });
         tl.setupWithViewPager(vp);
+    }
+
+    public EffectFragment setCheckAvailableCallback(MainActivity.ICheckAvailableCallback callback) {
+        mCheckAvailableCallback = callback;
+        return this;
     }
 
     /**
      * 将进度分发出去，有两个出口
      * 1、分到对应的 Fragment 中供其更改 UI
      * 2、传递给 Callback 供 EffectRenderHelper 渲染
-     * @param progress 进度，0～100
+     * @param progress 进度，0～1
      */
     private void dispatchProgress(float progress) {
         if (mSelectType < 0) return;
 
-        mSelectFragment.onProgress(progress);
+        if (mSelectFragment != null) {
+            mSelectFragment.onProgress(progress, mSelectType);
+        }
 
         if (pb.getProgress() != progress) {
             pb.setProgress(progress);
         }
 
         if (mSelectType == TYPE_FILTER) {
+            if (getCallback() == null) {
+                return;
+            }
+            mProgressMap.put(TYPE_FILTER, progress);
             getCallback().onFilterValueChanged(progress);
         } else {
-            if ((mSelectType & MASK) == TYPE_BEAUTY_FACE) {
-                mBeautyProgressMap.put(mSelectType, progress);
-            } else if ((mSelectType & MASK) == TYPE_BEAUTY_RESHAPE) {
-                mMakeupProgressMap.put(mSelectType, progress);
+            if ((mSelectType & MASK) == TYPE_BEAUTY_FACE ||
+                    (mSelectType & MASK) == TYPE_BEAUTY_RESHAPE ||
+                    (mSelectType & MASK) == TYPE_MAKEUP_OPTION) {
+                mProgressMap.put(mSelectType, progress);
             }
 
-            // 特殊情况，锐化的强度值为 0～0.9
-            if (mSelectType == TYPE_BEAUTY_FACE_SHARPEN) {
-                progress = progress * 0.9F;
-            }
             // 从 mComposerNodeMap 中取 node
             ComposerNode node = mComposerNodeMap.get(mSelectType);
             if (node == null) {
@@ -344,26 +350,30 @@ public class EffectFragment extends BaseFeatureFragment<EffectContract.Presenter
                 return;
             }
             node.setValue(progress);
-            getCallback().updateComposeNodeIntensity(node);
+            updateNodeIntensity(node);
         }
     }
 
     @Override
     public void onClose() {
         // 关闭美颜、美妆、滤镜效果
+        if (getCallback() == null) {
+            return;
+        }
         getCallback().updateComposeNodes(new String[0]);
         getCallback().onFilterSelected(null);
 
-        // 清空缓存
-        mBeautyProgressMap.clear();
-        mMakeupProgressMap.clear();
-        mMakeupOptionSelectMap.clear();
-        mComposerNodeMap.clear();
+        // 清空缓存数据
+//        mProgressMap.clear();
+//        mMakeupOptionSelectMap.clear();
+//        mComposerNodeMap.clear();
+//        mTypeMap.clear();
+        mSavedSelectType = mSelectType;
+        mSelectType = TYPE_CLOSE;
 
         // 重置 view
         vp.setCurrentItem(0);
         pb.setProgress(0);
-        mTypeMap.clear();
 
         // 重置 MakeupOptionFragment
         MakeupOptionFragment fragment = (MakeupOptionFragment) getChildFragmentManager()
@@ -374,8 +384,8 @@ public class EffectFragment extends BaseFeatureFragment<EffectContract.Presenter
 
         // 调用子 View onClose
         for (Fragment f : mFragmentList) {
-            if (f instanceof OnCloseListener) {
-                ((OnCloseListener) f).onClose();
+            if (f instanceof MainActivity.OnCloseListener) {
+                ((MainActivity.OnCloseListener) f).onClose();
             }
         }
     }
@@ -387,33 +397,180 @@ public class EffectFragment extends BaseFeatureFragment<EffectContract.Presenter
         BeautyFaceFragment fragment = (BeautyFaceFragment) mFragmentList.get(POSITION_MAKEUP);
         fragment.onProgress(select == 0 ? 0 : 1);
 
-        // 生成对应 flag
-        mComposerNodeMap.put(node.getId(), node);
+        int lastType = mSelectType;
+        mSelectType = node.getId();
 
+        // 关闭按钮
+        if (mSelectType == TYPE_CLOSE) {
+            mComposerNodeMap.remove(lastType);
+            mProgressMap.remove(lastType);
+            pb.setProgress(0);
+
+            updateComposerNodes();
+            return;
+        }
+
+        mComposerNodeMap.put(mSelectType, node);
         updateComposerNodes();
-    }
 
-    @Override
-    public void onCloseClick() {
-        showOrHideMakeupOptionFragment(false);
+        float progress = mProgressMap.get(mSelectType, mPresenter.getDefaultValue(mSelectType));
+//        float progress = mPresenter.getDefaultValue(mSelectType);
+        dispatchProgress(progress);
     }
 
     /**
-     * 更新 ComposerNode，先调用 Presenter 将 composerNodeMap 转化为 String[]
+     * 默认按钮点击之后，需要将所有的值都设置为默认给定的值，其间主要需要解决三个问题
+     * 1。 各功能强度值变动之后，需要更改各 item 的标志点
+     * 2。 修改到默认值后，需要回到原来的状态（原来选中的按钮依旧选中，进度条依旧指示当前选中的按钮）
+     * 3。 不能影响没有强度或不参与的功能（美体、美妆）
      */
+    @Override
+    public void onDefaultClick() {
+        if (getCallback() == null) return;
+        getCallback().onDefaultClick();
+
+        int currentType = mSelectType;
+        IProgressCallback currentFragment = mSelectFragment;
+        float currentProgress = pb.getProgress();
+        int selectedFace = mTypeMap.get(POSITION_BEAUTY, TYPE_CLOSE);
+        int selectedReshape = mTypeMap.get(POSITION_RESHAPE, TYPE_CLOSE);
+
+        // close beauty body and makeup when set default
+        ((BeautyFaceFragment)mFragmentList.get(POSITION_BODY)).onClose();
+        ((BeautyFaceFragment)mFragmentList.get(POSITION_MAKEUP)).onClose();
+        ((FilterFragment)mFragmentList.get(POSITION_FILTER)).onClose();
+        getCallback().onFilterSelected(null);
+        mMakeupOptionSelectMap.clear();
+        showOrHideMakeupOptionFragment(false);
+        mPresenter.removeProgressInMap(mProgressMap, TYPE_MAKEUP_OPTION);
+
+        mComposerNodeMap.clear();
+        mPresenter.generateDefaultBeautyNodes(mComposerNodeMap);
+        updateComposerNodes();
+        for (int i = 0; i < mComposerNodeMap.size(); i++) {
+            ComposerNode node = mComposerNodeMap.valueAt(i);
+            if (mPresenter.hasIntensity(node.getId())) {
+                mSelectType = node.getId();
+                mSelectFragment = getFragmentWithType(mSelectType);
+                dispatchProgress(node.getValue());
+
+                if (mSelectType == currentType) {
+                    currentProgress = node.getValue();
+                }
+            }
+        }
+
+        if (selectedFace == TYPE_CLOSE) {
+            ((IProgressCallback)mFragmentList.get(POSITION_BEAUTY)).setSelect(-1);
+        } else {
+            ((IProgressCallback)mFragmentList.get(POSITION_BEAUTY)).setSelectItem(selectedFace);
+        }
+        if (selectedReshape == TYPE_CLOSE) {
+            ((IProgressCallback)mFragmentList.get(POSITION_RESHAPE)).setSelect(-1);
+        } else {
+            ((IProgressCallback)mFragmentList.get(POSITION_RESHAPE)).setSelectItem(selectedReshape);
+        }
+        pb.setProgress(currentProgress);
+        mSelectType = currentType;
+        mSelectFragment = currentFragment;
+    }
+
+    public void recoverState() {
+        mSelectType = mSavedSelectType;
+        int currentType = mSelectType;
+        IProgressCallback currentFragment = mSelectFragment;
+        float currentProgress = pb.getProgress();
+        int selectedFace = mTypeMap.get(POSITION_BEAUTY, TYPE_CLOSE);
+        int selectedReshape = mTypeMap.get(POSITION_RESHAPE, TYPE_CLOSE);
+        int selectedBody = mTypeMap.get(POSITION_BODY, TYPE_CLOSE);
+        int selectedMakeup = mTypeMap.get(POSITION_MAKEUP, TYPE_CLOSE);
+        boolean hasBeauty = false, hasReshape = false;
+
+        // close beauty body and makeup when set default
+//        ((BeautyFaceFragment)mFragmentList.get(POSITION_BODY)).onClose();
+//        ((BeautyFaceFragment)mFragmentList.get(POSITION_MAKEUP)).onClose();
+//        ((FilterFragment)mFragmentList.get(POSITION_FILTER)).onClose();
+//        mMakeupOptionSelectMap.clear();
+//        showOrHideMakeupOptionFragment(false);
+//        mPresenter.removeProgressInMap(mProgressMap, TYPE_MAKEUP_OPTION);
+
+//        mComposerNodeMap.clear();
+//        mPresenter.generateDefaultBeautyNodes(mComposerNodeMap);
+        updateComposerNodes();
+        for (int i = 0; i < mComposerNodeMap.size(); i++) {
+            ComposerNode node = mComposerNodeMap.valueAt(i);
+            if (mPresenter.hasIntensity(node.getId())) {
+                mSelectType = node.getId();
+                mSelectFragment = getFragmentWithType(mSelectType);
+                dispatchProgress(node.getValue());
+                if ((mSelectType & MASK) == TYPE_BEAUTY_FACE && node.getValue() > 0) {
+                    hasBeauty = true;
+                } else if ((mSelectType & MASK) == TYPE_BEAUTY_RESHAPE && node.getValue() > 0) {
+                    hasReshape = true;
+                }
+
+                if (mSelectType == currentType) {
+                    currentProgress = node.getValue();
+                }
+            }
+        }
+
+//        if (selectedFace == TYPE_CLOSE) {
+//            ((IProgressCallback)mFragmentList.get(POSITION_BEAUTY)).setSelect(-1);
+//        }
+        if (selectedFace == TYPE_CLOSE && hasBeauty) {
+            selectedFace = 0;
+        }
+        ((IProgressCallback)mFragmentList.get(POSITION_BEAUTY)).setSelectItem(selectedFace);
+//        if (selectedReshape == TYPE_CLOSE) {
+//            ((IProgressCallback)mFragmentList.get(POSITION_RESHAPE)).setSelect(-1);
+//        }
+        if (selectedReshape == TYPE_CLOSE && hasReshape) {
+            selectedReshape = 0;
+        }
+        ((IProgressCallback)mFragmentList.get(POSITION_RESHAPE)).setSelectItem(selectedReshape);
+//        if (selectedBody == TYPE_CLOSE) {
+//            ((IProgressCallback)mFragmentList.get(POSITION_BODY)).setSelect(-1);
+//        }
+        ((IProgressCallback)mFragmentList.get(POSITION_BODY)).setSelectItem(selectedBody);
+//        if (selectedMakeup == TYPE_CLOSE) {
+//            ((IProgressCallback)mFragmentList.get(POSITION_MAKEUP)).setSelect(-1);
+//        }
+        ((IProgressCallback)mFragmentList.get(POSITION_MAKEUP)).setSelectItem(selectedMakeup);
+        pb.setProgress(currentProgress);
+        mSelectType = currentType;
+        mSelectFragment = currentFragment;
+
+        if (mSavedFilterPath != null) {
+            getCallback().onFilterSelected(mSavedFilterPath == null ? null : new File(mSavedFilterPath));
+            getCallback().onFilterValueChanged(mProgressMap.get(TYPE_FILTER));
+            ((FilterFragment)mFragmentList.get(POSITION_FILTER)).setSelectItem(mSavedFilterPath);
+        }
+    }
+
     private void updateComposerNodes() {
+        if (getCallback() == null) {
+            return;
+        }
         getCallback().updateComposeNodes(mPresenter.generateComposerNodes(mComposerNodeMap));
+    }
+
+    private void updateNodeIntensity(ComposerNode node) {
+        if (getCallback() == null) {
+            return;
+        }
+        getCallback().updateComposeNodeIntensity(node);
     }
 
     private void closeBeautyFace() {
         mPresenter.removeNodesOfType(mComposerNodeMap, TYPE_BEAUTY_FACE);
+        mPresenter.removeProgressInMap(mProgressMap, TYPE_BEAUTY_FACE);
         updateComposerNodes();
 
-        // 清除缓存
-        mBeautyProgressMap.clear();
+        pb.setProgress(0);
 
         // 调用子 Fragment 关闭 UI
-        OnCloseListener listener = (OnCloseListener) mFragmentList.get(POSITION_BEAUTY);
+        MainActivity.OnCloseListener listener = (MainActivity.OnCloseListener) mFragmentList.get(POSITION_BEAUTY);
         listener.onClose();
     }
 
@@ -421,28 +578,31 @@ public class EffectFragment extends BaseFeatureFragment<EffectContract.Presenter
         mPresenter.removeNodesOfType(mComposerNodeMap, TYPE_BEAUTY_BODY);
         updateComposerNodes();
         // 调用子 Fragment 关闭 UI
-        OnCloseListener listener = (OnCloseListener) mFragmentList.get(POSITION_BODY);
+        MainActivity.OnCloseListener listener = (MainActivity.OnCloseListener) mFragmentList.get(POSITION_BODY);
         listener.onClose();
     }
 
     private void closeBeautyReshape() {
         mPresenter.removeNodesOfType(mComposerNodeMap, TYPE_BEAUTY_RESHAPE);
+        mPresenter.removeProgressInMap(mProgressMap, TYPE_BEAUTY_RESHAPE);
         updateComposerNodes();
 
-        int index;
-        mMakeupProgressMap.clear();
+        pb.setProgress(0);
 
-        OnCloseListener listener = (OnCloseListener) mFragmentList.get(POSITION_RESHAPE);
+        MainActivity.OnCloseListener listener = (MainActivity.OnCloseListener) mFragmentList.get(POSITION_RESHAPE);
         listener.onClose();
     }
 
     private void closeMakeup() {
         mPresenter.removeNodesOfType(mComposerNodeMap, TYPE_MAKEUP_OPTION);
+        mPresenter.removeProgressInMap(mProgressMap, TYPE_MAKEUP);
+        mPresenter.removeProgressInMap(mProgressMap, TYPE_MAKEUP_OPTION);
         updateComposerNodes();
 
+        pb.setProgress(0);
         mMakeupOptionSelectMap.clear();
 
-        OnCloseListener listener = (OnCloseListener) mFragmentList.get(POSITION_MAKEUP);
+        MainActivity.OnCloseListener listener = (MainActivity.OnCloseListener) mFragmentList.get(POSITION_MAKEUP);
         listener.onClose();
     }
 
@@ -465,8 +625,10 @@ public class EffectFragment extends BaseFeatureFragment<EffectContract.Presenter
         if (isShow) {
             tl.setVisibility(View.GONE);
             vp.setVisibility(View.GONE);
+            ivCloseMakeupOption.setVisibility(View.VISIBLE);
             tvTitle.setVisibility(View.VISIBLE);
             tvTitle.animate().alpha(1).setDuration(ANIMATION_DURATION).start();
+            ivCloseMakeupOption.animate().alpha(1).setDuration(ANIMATION_DURATION).start();
             if (makeupOptionFragment == null) {
                 makeupOptionFragment = generateMakeupOptionFragment();
                 ((MakeupOptionFragment)makeupOptionFragment).setMakeupType(mSelectType, mMakeupOptionSelectMap.get(mSelectType, 0));
@@ -477,12 +639,15 @@ public class EffectFragment extends BaseFeatureFragment<EffectContract.Presenter
                 transaction.show(makeupOptionFragment).commit();
             }
         } else {
+            if (makeupOptionFragment == null) return;
             transaction.hide(makeupOptionFragment).commit();
             tvTitle.animate().alpha(0).setDuration(ANIMATION_DURATION).start();
+            ivCloseMakeupOption.animate().alpha(0).setDuration(ANIMATION_DURATION).start();
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     tvTitle.setVisibility(View.GONE);
+                    ivCloseMakeupOption.setVisibility(View.GONE);
                     tl.setVisibility(View.VISIBLE);
                     vp.setVisibility(View.VISIBLE);
                 }
@@ -498,6 +663,9 @@ public class EffectFragment extends BaseFeatureFragment<EffectContract.Presenter
      * 对比按钮按下，关闭无美颜美妆
      */
     private void onNormalDown() {
+        if (getCallback() == null) {
+            return;
+        }
         getCallback().setEffectOn(false);
     }
 
@@ -505,23 +673,29 @@ public class EffectFragment extends BaseFeatureFragment<EffectContract.Presenter
      * 对比按钮松开，恢复美颜美妆
      */
     private void onNormalUp() {
+        if (getCallback() == null) {
+            return;
+        }
         getCallback().setEffectOn(true);
     }
 
-    /**
-     * 从缓存表找到对应类型的缓存值
-     * @param type 特效类型
-     * @return 缓存值，没有则返回 0
-     */
-    private float getProgressWithType(int type) {
-        float value;
-        if ((value = mBeautyProgressMap.get(type, NO_VALUE)) > 0) {
-            return value;
+    private IProgressCallback getFragmentWithType(int type) {
+        int index = ((type & MASK) >> OFFSET) - 1;
+        // TYPE_MAKEUP_OPTION 映射到 TYPE_MAKEUP
+        if (index == 5) index = 3;
+        return index < mFragmentList.size() ? (IProgressCallback) mFragmentList.get(index) : null;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_default:
+                onDefaultClick();
+                break;
+            case R.id.iv_close_makeup_option:
+                showOrHideMakeupOptionFragment(false);
+                break;
         }
-        if ((value = mMakeupProgressMap.get(type, NO_VALUE)) > 0) {
-            return value;
-        }
-        return 0F;
     }
 
     /**
@@ -533,6 +707,14 @@ public class EffectFragment extends BaseFeatureFragment<EffectContract.Presenter
          * @param progress 进度
          */
         void onProgress(float progress);
+
+        void onProgress(float progress, int id);
+
+        int getSelect();
+
+        void setSelect(int select);
+
+        void setSelectItem(int id);
     }
 
     public interface IEffectCallback {
@@ -557,5 +739,7 @@ public class EffectFragment extends BaseFeatureFragment<EffectContract.Presenter
          * @param isOn if false，则在处理纹理的时候不使用 RenderManager 处理原始纹理，则不会有效果
          */
         void setEffectOn(boolean isOn);
+
+        void onDefaultClick();
     }
 }

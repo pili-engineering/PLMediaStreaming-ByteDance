@@ -12,9 +12,6 @@
     <dimen name="pldroid_streaming_red_circle_padding">8dip</dimen>
     <dimen name="pldroid_streaming_red_square_padding">16dip</dimen>
     <dimen name="pldroid_streaming_streaming_status_padding">50dp</dimen>
-
-
-
     <dimen name="radio_size">16sp</dimen>
     <dimen name="setting_height">300dp</dimen>
     <dimen name="toggle_height">25dp</dimen>

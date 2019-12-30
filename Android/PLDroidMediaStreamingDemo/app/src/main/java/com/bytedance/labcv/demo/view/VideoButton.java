@@ -11,8 +11,8 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.bytedance.labcv.demo.utils.DensityUtils;
 import com.qiniu.pili.droid.streaming.demo.R;
+import com.bytedance.labcv.demo.utils.DensityUtils;
 
 public class VideoButton extends View {
     public static final float STEP_PROGRESS = 0.05F;

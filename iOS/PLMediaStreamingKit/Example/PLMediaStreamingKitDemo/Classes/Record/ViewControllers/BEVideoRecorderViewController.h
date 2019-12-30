@@ -2,9 +2,22 @@
 
 #import <UIKit/UIKit.h>
 
+
+@protocol BETapDelegate <NSObject>
+
+- (void)onTap;
+
+@end
+
+@protocol BEDefaultTapDelegate <NSObject>
+
+- (void)onDefaultTap;
+
+@end
+
 @interface BEVideoRecorderViewController : UIViewController
 
-- (void)initProcessor:(CGSize)videoSize;
+- (void)initProcessor;
 
 - (CVPixelBufferRef)process:(CVPixelBufferRef)pixelBuffer timeStamp:(double)timeStamp;
 

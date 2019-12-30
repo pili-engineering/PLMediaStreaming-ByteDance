@@ -1,14 +1,27 @@
 package com.qiniu.pili.droid.streaming.demo.activity;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.media.AudioFormat;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Message;
+import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.SwitchCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -16,11 +29,30 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bytedance.labcv.demo.MainActivity;
+import com.bytedance.labcv.demo.PermissionsActivity;
+import com.bytedance.labcv.demo.core.CameraRenderView;
+import com.bytedance.labcv.demo.core.EffectRenderHelper;
+import com.bytedance.labcv.demo.fragment.EffectFragment;
+import com.bytedance.labcv.demo.fragment.StickerFragment;
+import com.bytedance.labcv.demo.model.CaptureResult;
+import com.bytedance.labcv.demo.model.ComposerNode;
+import com.bytedance.labcv.demo.utils.BitmapUtils;
+import com.bytedance.labcv.demo.utils.CommonUtils;
+import com.bytedance.labcv.demo.utils.ToasUtils;
+import com.bytedance.labcv.demo.utils.UserData;
+import com.bytedance.labcv.demo.view.VideoButton;
+import com.bytedance.labcv.effectsdk.BytedEffectConstants;
+import com.bytedance.labcv.effectsdk.library.LogUtils;
+import com.bytedance.labcv.effectsdk.library.OrientationSensor;
 import com.github.angads25.filepicker.controller.DialogSelectionListener;
 import com.github.angads25.filepicker.model.DialogConfigs;
 import com.github.angads25.filepicker.model.DialogProperties;
@@ -50,12 +82,17 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.util.Arrays;
 import java.util.List;
+
+import static com.bytedance.labcv.demo.contract.StickerContract.TYPE_ANIMOJI;
+import static com.bytedance.labcv.demo.contract.StickerContract.TYPE_STICKER;
 
 public class AVStreamingActivity extends StreamingBaseActivity implements
         StreamingPreviewCallback,
         CameraPreviewFrameView.Listener,
-        SurfaceTextureCallback {
+        SurfaceTextureCallback, EffectRenderHelper.OnEffectListener, View.OnClickListener {
     private static final String TAG = "AVStreamingActivity";
 
     private CameraStreamingSetting mCameraStreamingSetting;
@@ -102,6 +139,10 @@ public class AVStreamingActivity extends StreamingBaseActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        OrientationSensor.start(this);
+
+        checkPermissions();
+        initViews();
     }
 
     @Override
@@ -128,13 +169,19 @@ public class AVStreamingActivity extends StreamingBaseActivity implements
 
     @Override
     public void onBackPressed() {
+        if (closeFeature(true)) {
+            return;
+        }
         super.onBackPressed();
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         mMediaStreamingManager.destroy();
+        OrientationSensor.stop();
+        super.onDestroy();
+        mEffectFragment = null;
+        mStickerFragment = null;
     }
 
     @Override
@@ -967,19 +1014,16 @@ public class AVStreamingActivity extends StreamingBaseActivity implements
     @Override
     public void onSurfaceCreated() {
         Log.i(TAG, "onSurfaceCreated");
-        /**
-         * only used in custom beauty algorithm case
-         */
         mFBO.initialize(this);
     }
 
     @Override
     public void onSurfaceChanged(int width, int height) {
         Log.i(TAG, "onSurfaceChanged width:" + width + ",height:" + height);
-        /**
-         * only used in custom beauty algorithm case
-         */
         mFBO.updateSurfaceSize(width, height);
+        effectRenderHelper.onSurfaceChanged(width, height);
+        effectRenderHelper.initEffectSDK(480, 848);
+        effectRenderHelper.recoverStatus();
     }
 
     @Override
@@ -989,6 +1033,7 @@ public class AVStreamingActivity extends StreamingBaseActivity implements
          * only used in custom beauty algorithm case
          */
         mFBO.release();
+        effectRenderHelper.destroyEffectSDK();
     }
 
     @Override
@@ -997,8 +1042,11 @@ public class AVStreamingActivity extends StreamingBaseActivity implements
          * When using custom beauty algorithm, you should return a new texId from the SurfaceTexture.
          * newTexId should not equal with texId, Otherwise, there is no filter effect.
          */
-        int newTexId = mFBO.drawFrame(texId, texWidth, texHeight);
-        return newTexId;
+//        int newTexId = mFBO.drawFrame(texId, texWidth, texHeight);
+//        return newTexId;
+        return effectRenderHelper.processTexure(texId, BytedEffectConstants.TextureFormat.Texture_Oes,
+                texWidth, texHeight, 0, false, BytedEffectConstants.Rotation.CLOCKWISE_ROTATE_0,
+                System.currentTimeMillis());
     }
 
     @Override
@@ -1010,5 +1058,585 @@ public class AVStreamingActivity extends StreamingBaseActivity implements
          * System.arraycopy(beauties, 0, bytes, 0, bytes.length);
          */
         return true;
+    }
+
+
+    // bytedance
+    // 标志面板类型，分别是 识别、特效、贴纸
+    // Logo panel type, respectively is identification, special effects, stickers
+    public static final String TAG_EFFECT = "effect";
+    public static final String TAG_STICKER = "sticker";
+    public static final String TAG_ANIMOJI = "animoji";
+
+    public static final int ANIMATOR_DURATION = 400;
+
+    private EffectFragment mEffectFragment;
+    private StickerFragment mStickerFragment;
+    private StickerFragment mAnimojiFragment;
+    // 正在处于功能可用状态的面板
+    // current panel
+    private OnCloseListener mWorkingFragment;
+
+    private TextView mFpsTextView;
+
+    //    private CameraRenderView mSurfaceView;
+    private EffectRenderHelper effectRenderHelper;
+
+//    private FrameLayout mSurfaceContainer;
+
+    private View rootView;
+
+    private LinearLayout llFeature;
+    private LinearLayout llEffect;
+    private LinearLayout llSticker;
+    private LinearLayout llAnimoji;
+
+    //  below UI elements are for debug
+    public StringBuilder cameraInfo;
+    public TextView tvInfo;
+
+    public TextView tvcameraInfo;
+
+    public ImageView mImageView;
+    private VideoButton vbTakePic;
+
+//    private SwitchCompat scExclusive;
+
+    private boolean mFirstEnter = true;
+    private String mSavedStickerPath;
+    private String mSavedAnimojiPath;
+    private MainActivity.ICheckAvailableCallback mCheckAvailableCallback = new MainActivity.ICheckAvailableCallback() {
+        @Override
+        public boolean checkAvailable(int id) {
+            if (mSavedAnimojiPath != null && !mSavedAnimojiPath.equals("")) {
+                ToasUtils.show(getString(R.string.tip_close_animoji_first));
+                return false;
+            }
+            if (isExclusive() && id != TYPE_STICKER && mSavedStickerPath != null && !mSavedStickerPath.equals("")) {
+                ToasUtils.show(getString(R.string.tip_close_sticker_first));
+                return false;
+            }
+            return true;
+        }
+    };
+
+
+    private static final int UPDATE_INFO = 1;
+    // 拍照失败
+    private static final int CAPTURE_FAIL = 9;
+    // 拍照成功
+    private static final int CAPTURE_SUCCESS = 10;
+
+
+
+    private static final int UPDATE_INFO_INTERVAL = 1000;
+
+
+//    private InnerHandler mHandler = new InnerHandler(this);
+
+    private void initViews() {
+        llFeature = findViewById(R.id.ll_feature);
+        llEffect = findViewById(R.id.ll_effect);
+        llSticker = findViewById(R.id.ll_sticker);
+        llAnimoji = findViewById(R.id.ll_animoji);
+        mImageView = findViewById(R.id.img);
+        tvInfo = findViewById(R.id.tv_info);
+        tvcameraInfo = findViewById(R.id.camera_info);
+//        mSurfaceView = findViewById(R.id.gl_surface);
+//        effectRenderHelper = mSurfaceView.getEffectRenderHelper();
+        effectRenderHelper = new EffectRenderHelper(this);
+        effectRenderHelper.setOnEffectListener(this);
+//        mSurfaceContainer = findViewById(R.id.surface_container);
+
+        findViewById(R.id.iv_change_camera).setOnClickListener(this);
+        vbTakePic = findViewById(R.id.btn_take_pic);
+        vbTakePic.setOnClickListener(this);
+        llEffect.setOnClickListener(this);
+        llSticker.setOnClickListener(this);
+        llAnimoji.setOnClickListener(this);
+//        scExclusive = findViewById(R.id.switch_exclusive);
+//        scExclusive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if (isChecked == UserData.getExclusive(getApplicationContext(), false)) {
+//                    return;
+//                }
+//                UserData.setExclusive(getApplicationContext(), isChecked);
+//                ToasUtils.show(getString(R.string.exclusive_tip));
+//            }
+//        });
+
+        mFpsTextView = findViewById(R.id.info_fps);
+        rootView = findViewById(R.id.rl_root);
+        rootView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                closeFeature(true);
+                return true;
+            }
+        });
+    }
+
+//    private void switchCamera() {
+//        mSurfaceView.switchCamera();
+//    }
+
+
+
+
+    /**
+     * 根据 TAG 创建对应的 Fragment
+     * Create the corresponding Fragment based on TAG
+     * @param tag  tag
+     * @return  Fragment
+     */
+    private Fragment generateFragment(String tag) {
+        switch (tag) {
+            case TAG_EFFECT:
+                if (mEffectFragment != null) return mEffectFragment;
+
+                final EffectFragment effectFragment = new EffectFragment();
+                effectFragment.setCheckAvailableCallback(mCheckAvailableCallback)
+                        .setCallback(new EffectFragment.IEffectCallback() {
+
+                            @Override
+                            public void updateComposeNodes(final String[] nodes) {
+                                LogUtils.e("update composer nodes: " + Arrays.toString(nodes));
+//                                if (nodes.length > 0) {
+//                                    onFragmentWorking(mEffectFragment);
+//                                }
+                                effectRenderHelper.setComposeNodes(nodes);
+                            }
+
+
+                            @Override
+                            public void updateComposeNodeIntensity(final ComposerNode node) {
+                                LogUtils.e("update composer node intensity: node: " + node.getNode() + ", key: " + node.getKey() + ", value: " + node.getValue());
+
+                                effectRenderHelper.updateComposeNode(node, true);
+                            }
+
+                            @Override
+                            public void onFilterSelected(final File file) {
+
+                                effectRenderHelper.setFilter(file != null ? file.getAbsolutePath() : "");
+//                                if (file != null) {
+//                                    onFragmentWorking(mEffectFragment);
+//                                }
+                            }
+
+
+                            @Override
+                            public void onFilterValueChanged(final float cur) {
+
+                                effectRenderHelper.updateIntensity(BytedEffectConstants.IntensityType.Filter, cur);
+                            }
+
+                            @Override
+                            public void setEffectOn(final boolean isOn) {
+                                effectRenderHelper.setEffectOn(isOn);
+                            }
+
+                            @Override
+                            public void onDefaultClick() {
+                                onFragmentWorking(mEffectFragment);
+                            }
+                        });
+                mEffectFragment = effectFragment;
+                return effectFragment;
+            case TAG_STICKER:
+                if (mStickerFragment != null) return mStickerFragment;
+
+                StickerFragment stickerFragment = new StickerFragment()
+                        .setCheckAvailableCallback(mCheckAvailableCallback)
+                        .setType(TYPE_STICKER);
+                stickerFragment.setCallback(new StickerFragment.IStickerCallback() {
+                    @Override
+                    public void onStickerSelected(final File file) {
+                        mSavedStickerPath = file == null ? null : file.getAbsolutePath();
+                        if (file != null) {
+                            onFragmentWorking(mStickerFragment);
+                        }
+                        effectRenderHelper.setSticker(file != null ? file.getAbsolutePath() : "");
+                        if (isExclusive() && file == null) {
+                            mEffectFragment.recoverState();
+                        }
+                    }
+                });
+                mStickerFragment = stickerFragment;
+                return stickerFragment;
+            case TAG_ANIMOJI:
+                if (mAnimojiFragment != null) return mAnimojiFragment;
+
+                StickerFragment animojiFragment = new StickerFragment().setType(TYPE_ANIMOJI);
+                animojiFragment.setCallback(new StickerFragment.IStickerCallback() {
+                    @Override
+                    public void onStickerSelected(final File file) {
+                        mSavedAnimojiPath = file == null ? null : file.getAbsolutePath();
+                        if (file != null) {
+                            onFragmentWorking(mAnimojiFragment);
+                        }
+                        effectRenderHelper.setSticker(file != null ? file.getAbsolutePath() : "");
+                        if (file == null) {
+                            if (mStickerFragment != null && mSavedStickerPath != null && !mSavedStickerPath.equals("")) {
+                                mStickerFragment.recoverState(mSavedStickerPath);
+                            }
+                            if ((!isExclusive() || mSavedStickerPath == null || mSavedStickerPath.equals(""))
+                                    && mEffectFragment != null) {
+                                mEffectFragment.recoverState();
+                            }
+                        }
+//                        if (file == null && mEffectFragment != null) {
+//                            mEffectFragment.recoverState();
+//                        }
+//                        if (file == null && mSavedStickerPath != null &&
+//                                !mSavedStickerPath.equals("") && mStickerFragment != null) {
+//                            mStickerFragment.recoverState(mSavedStickerPath);
+//                        }
+                    }
+                });
+                mAnimojiFragment = animojiFragment;
+                return animojiFragment;
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * 展示某一个 feature 面板
+     * Show a feature panel
+     * @param tag tag use to mark Fragment 用于标志 Fragment 的 tag
+     */
+    private void showFeature(String tag, boolean hideBoard) {
+        if (effectRenderHelper == null) return;
+
+        if (showingFragment() != null) {
+            getSupportFragmentManager().beginTransaction().hide(showingFragment()).commit();
+        }
+
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        if (hideBoard) {
+            ft.setCustomAnimations(R.anim.board_enter, R.anim.board_exit);
+        }
+        Fragment fragment = fm.findFragmentByTag(tag);
+
+        if (fragment == null) {
+            fragment = generateFragment(tag);
+            ft.add(R.id.board_container, fragment, tag).commit();
+        } else {
+            ft.show(fragment).commit();
+        }
+        if (hideBoard) {
+            showOrHideBoard(false);
+        }
+    }
+
+    /**
+     * 关闭所有的 feature 面板
+     * close all feature panel
+     * @return whether close panel successfully 是否成功关闭某个面板，即是否有面板正在开启中
+     */
+    private boolean closeFeature(boolean animation) {
+        Fragment showingFragment = showingFragment();
+        if (showingFragment != null) {
+            FragmentTransaction ft =getSupportFragmentManager().beginTransaction();
+            if (animation) {
+                ft.setCustomAnimations(R.anim.board_enter, R.anim.board_exit);
+            }
+            ft.hide(showingFragment).commit();
+        }
+
+        showOrHideBoard(true);
+        return showingFragment != null;
+    }
+
+    private Fragment showingFragment() {
+        if (mEffectFragment != null && !mEffectFragment.isHidden()) {
+            return mEffectFragment;
+        } else if (mStickerFragment != null && !mStickerFragment.isHidden()) {
+            return mStickerFragment;
+        } else if (mAnimojiFragment != null && !mAnimojiFragment.isHidden()) {
+            return mAnimojiFragment;
+        }
+        return null;
+    }
+
+    /**
+     * 展示或关闭菜单面板
+     * show board
+     * @param show 展示
+     */
+    private void showOrHideBoard(boolean show) {
+        if (show) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (showingFragment() == null) {
+                        vbTakePic.setVisibility(View.VISIBLE);
+                        llFeature.setVisibility(View.VISIBLE);
+                    }
+                }
+            }, ANIMATOR_DURATION);
+        } else {
+            vbTakePic.setVisibility(View.GONE);
+            llFeature.setVisibility(View.GONE);
+        }
+    }
+
+
+
+
+    private void checkPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(com.bytedance.labcv.demo.utils.Config.PERMISSION_CAMERA) != PackageManager.PERMISSION_GRANTED ||
+                    checkSelfPermission(com.bytedance.labcv.demo.utils.Config.PERMISSION_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                    checkSelfPermission(com.bytedance.labcv.demo.utils.Config.PERMISSION_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                // start Permissions activity
+                Intent intent = new Intent(this, PermissionsActivity.class);
+                startActivity(intent);
+                finish();
+                overridePendingTransition(0, 0);
+            }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (CommonUtils.isFastClick()) {
+            ToasUtils.show("too fast click");
+            return;
+        }
+        switch (v.getId()) {
+            case R.id.iv_change_camera:
+//                switchCamera();
+                break;
+            case R.id.btn_take_pic:
+                takePic();
+                break;
+            case R.id.ll_effect:
+                showFeature(TAG_EFFECT, true);
+                break;
+            case R.id.ll_sticker:
+                showFeature(TAG_STICKER, true);
+                break;
+            case R.id.ll_animoji:
+                showFeature(TAG_ANIMOJI, true);
+                break;
+        }
+    }
+
+
+
+    private void takePic() {
+        if (null == effectRenderHelper) return;
+        if (mHandler == null) return;
+        CaptureResult captureResult= effectRenderHelper.capture();
+
+        if (null == captureResult || captureResult.getWidth() == 0 || captureResult.getHeight() == 0|| null == captureResult.getByteBuffer()){
+            mHandler.sendEmptyMessage(CAPTURE_FAIL);
+
+        }else {
+            Message msg = mHandler.obtainMessage(CAPTURE_SUCCESS, captureResult);
+            mHandler.sendMessage(msg);
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        finish();
+    }
+
+//    private static class InnerHandler extends Handler {
+//        private final WeakReference<MainActivity> mActivity;
+//
+//        public InnerHandler(MainActivity activity) {
+//            mActivity = new WeakReference<>(activity);
+//        }
+//
+//        @Override
+//        public void handleMessage(Message msg) {
+//            MainActivity activity = mActivity.get();
+//            if (activity != null) {
+//                switch (msg.what) {
+//                    case UPDATE_INFO:
+//                        activity.mFpsTextView.setText("" + activity.mSurfaceView.getFrameRate());
+//                        sendEmptyMessageDelayed(UPDATE_INFO, UPDATE_INFO_INTERVAL);
+//                        break;
+//                    case CAPTURE_SUCCESS:
+//                        CaptureResult captureResult = (CaptureResult) msg.obj;
+//                        SavePicTask task  = new SavePicTask(mActivity.get());
+//                        task.execute(captureResult);
+//
+//                        break;
+//
+//
+//                }
+//            }
+//        }
+//
+//    }
+
+    static class SavePicTask extends AsyncTask<CaptureResult, Void,String> {
+        private WeakReference<Context> mContext;
+
+        public SavePicTask(Context context) {
+            mContext = new WeakReference<>(context);
+        }
+
+        @Override
+        protected String doInBackground(CaptureResult... captureResults) {
+            if (captureResults.length == 0) return "captureResult arrayLength is 0";
+            Bitmap bitmap = Bitmap.createBitmap(captureResults[0].getWidth(), captureResults[0].getHeight(), Bitmap.Config.ARGB_8888);
+            bitmap.copyPixelsFromBuffer(captureResults[0].getByteBuffer().position(0));
+            File file = BitmapUtils.saveToLocal(bitmap);
+            if (file.exists()){
+                return file.getAbsolutePath();
+            }else{
+                return "";
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String path) {
+            super.onPostExecute(path);
+            if (TextUtils.isEmpty(path)){
+                ToasUtils.show("图片保存失败");
+                return;
+            }
+            if (mContext.get() == null) {
+                try {
+                    new File(path).delete();
+                } catch (Exception ignored) {
+                }
+                ToasUtils.show("图片保存失败");
+            }
+            try{
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.DATA, path);
+                values.put(MediaStore.Images.Media.MIME_TYPE, "image/*");
+                mContext.get().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            ToasUtils.show("保存成功，路径："+path);
+        }
+    }
+
+    /**
+     * 当用户选择贴纸时，利用回调接口，关闭对应的开关
+     * When the user selects the sticker
+     * Use the callback interface to turn off the corresponding switch
+     */
+    private void onFragmentWorking(Fragment fragment) {
+        if (fragment == mEffectFragment) {
+            if (mStickerFragment != null) {
+                if (mSavedStickerPath != null) {
+                    mStickerFragment.onClose();
+                    mSavedStickerPath = null;
+                    effectRenderHelper.setSticker(null);
+                }
+            }
+            if (mAnimojiFragment != null) {
+                if (mSavedAnimojiPath != null) {
+                    mAnimojiFragment.onClose();
+                    mSavedAnimojiPath = null;
+                    effectRenderHelper.setSticker(null);
+                }
+            }
+        } else if (fragment == mStickerFragment) {
+            if (isExclusive() && mEffectFragment != null) {
+                mEffectFragment.onClose();
+            }
+        } else if (fragment == mAnimojiFragment) {
+            if (mEffectFragment != null) {
+                mEffectFragment.onClose();
+            }
+            if (mStickerFragment != null) {
+                mStickerFragment.onClose();
+            }
+        }
+//        if (fragment == mAnimojiFragment) {
+//            if (mEffectFragment != null) {
+//                mEffectFragment.onClose();
+//            }
+//            if (mStickerFragment != null) {
+//                mStickerFragment.onClose();
+//            }
+//            return;
+//        }
+//        if (!isExclusive()) {
+//            return;
+//        }
+//        if (fragment instanceof OnCloseListener) {
+//            if (fragment != mWorkingFragment) {
+//                // 开启贴纸会关闭美颜，反之不生效
+//                if (mWorkingFragment != null) {
+//                    mWorkingFragment.onClose();
+//                }
+//                mWorkingFragment = (OnCloseListener) fragment;
+//            }
+//        } else {
+//            throw new IllegalArgumentException("fragment " + fragment + " must implement " + OnCloseListener.class);
+//        }
+    }
+
+    @Override
+    public void onEffectInitialized() {
+        if (!mFirstEnter) {
+            return;
+        }
+        mFirstEnter = false;
+        final boolean exclusive = UserData.getExclusive(getApplicationContext(), false);
+        effectRenderHelper.setComposerMode(exclusive ? 0 : 1);
+        final String[] features = new String[30];
+        effectRenderHelper.getAvailableFeatures(features);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+//                scExclusive.setChecked(exclusive);
+                showFeature(TAG_EFFECT, false);
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mEffectFragment != null) {
+                            mEffectFragment.onDefaultClick();
+                        }
+                        closeFeature(false);
+                    }
+                });
+                for (String feature : features) {
+                    if (feature != null && feature.equals("3DStickerV3")) {
+                        llAnimoji.setVisibility(View.VISIBLE);
+                        break;
+                    }
+                }
+                llFeature.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    private boolean isExclusive() {
+        return effectRenderHelper.getComposerMode() == 0;
+    }
+
+    /**
+     * 定义一个回调接口，用于当用户选择其中一个面板时，
+     * 关闭其他面板的回调，此接口由各 Fragment 实现，
+     * 在 onClose() 方法中要完成各 Fragment 中 UI 的初始化，
+     * 即关闭用户已经开启的开关
+     *
+     * Define a callback interface for when a user selects one of the panels，
+     * close the callback of the other panel, which is implemented by each Fragment
+     * In the onClose() method, initialize the UI of each Fragment:
+     * turn off the switch that the user has already turned on
+     */
+    public interface OnCloseListener {
+        void onClose();
+    }
+
+    public interface ICheckAvailableCallback {
+        boolean checkAvailable(int id);
     }
 }

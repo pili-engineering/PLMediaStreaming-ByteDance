@@ -1,14 +1,10 @@
 <resources>
 
     <!-- Base application theme. -->
-
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
     </style>
+
     <style name="faceInfoTextStyle">
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">14dp</item>
@@ -27,11 +23,13 @@
         <item name="android:shadowDx">1</item>
         <item name="android:shadowDy">3</item>
     </style>
+    <!--    <style name="SeekBarStyle" parent="Widget.DiscreteSeekBar">-->
+    <!--        <item name="dsb_indicatorTextAppearance">@style/CustomFloaterTextAppearance</item>-->
+    <!--        <item name="dsb_indicatorColor">@color/dsb_progressbar_color</item>-->
+    <!--        <item name="dsb_progressColor">@color/dsb_progressbar_color</item>-->
+    <!--    </style>-->
 
-
-    <style name="AppThemeFullscreen" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowContentOverlay">@null</item>
+    <style name="ProgressTheme" parent="AppTheme">
+        <item name="colorAccent">@color/colorWhite</item>
     </style>
 </resources>

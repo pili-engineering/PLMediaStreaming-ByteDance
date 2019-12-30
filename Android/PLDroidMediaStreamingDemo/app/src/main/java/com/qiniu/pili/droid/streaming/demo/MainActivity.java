@@ -22,6 +22,7 @@ import com.google.zxing.integration.android.IntentResult;
 import com.qiniu.pili.droid.streaming.StreamingEnv;
 import com.qiniu.pili.droid.streaming.demo.activity.AVStreamingActivity;
 import com.qiniu.pili.droid.streaming.demo.activity.AudioStreamingActivity;
+import com.qiniu.pili.droid.streaming.demo.activity.ImportStreamingActivity;
 import com.qiniu.pili.droid.streaming.demo.activity.ScreenStreamingActivity;
 import com.qiniu.pili.droid.streaming.demo.activity.StreamingBaseActivity;
 import com.qiniu.pili.droid.streaming.demo.fragment.CameraConfigFragment;
@@ -29,13 +30,10 @@ import com.qiniu.pili.droid.streaming.demo.fragment.EncodingConfigFragment;
 import com.qiniu.pili.droid.streaming.demo.utils.Cache;
 import com.qiniu.pili.droid.streaming.demo.utils.PermissionChecker;
 import com.qiniu.pili.droid.streaming.demo.utils.Util;
-import com.qiniu.pili.droid.streaming.effect.BeautyImportStreamingActivity;
-import com.qiniu.pili.droid.streaming.effect.utils.Utils;
 
 import java.net.URI;
 import java.util.Arrays;
-
-import static com.qiniu.pili.droid.streaming.effect.utils.Config.ROOM_NUMBER;
+import java.util.UUID;
 
 public class MainActivity extends FragmentActivity {
     private static final String TAG = "MainActivity";
@@ -43,12 +41,11 @@ public class MainActivity extends FragmentActivity {
     private static final String GENERATE_STREAM_TEXT = "http://api-demo.qnsdk.com/v1/live/stream/";
 
     private static final String[] INPUT_TYPES = { "Authorized", "Unauthorized" };
-    private static final String[] STREAM_TYPES = { "Beauty-Video","Video-Audio", "Audio", "Import", "Screen" };
+    private static final String[] STREAM_TYPES = { "Video-Audio", "Audio", "Import", "Screen" };
     private static final Class[] ACTIVITY_CLASSES = {
             AVStreamingActivity.class,
-            AVStreamingActivity.class,
             AudioStreamingActivity.class,
-            BeautyImportStreamingActivity.class,
+            ImportStreamingActivity.class,
             ScreenStreamingActivity.class
     };
 
@@ -69,7 +66,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     private boolean isInputTypeUnauthorized() {
-        return mInputTypeSpinner.getSelectedItemPosition() == 2;
+        return mInputTypeSpinner.getSelectedItemPosition() == 1;
     }
 
     private void updateInputTextView(final String url) {
@@ -106,7 +103,7 @@ public class MainActivity extends FragmentActivity {
         if (bAudioStereo) {
             intent.putExtra(StreamingBaseActivity.AUDIO_CHANNEL_STEREO, bAudioStereo);
         }
-        if (pos <= 1) {
+        if (pos == 0) {
             intent.putExtras(mCameraConfigFragment.getIntent());
         }
         startActivity(intent);
@@ -127,14 +124,14 @@ public class MainActivity extends FragmentActivity {
         mStreamTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mEncodingConfigFragment.enableAudioOnly(position == 2);
-                mEncodingConfigFragment.enableWatermark(position <= 1);
-                mEncodingConfigFragment.enablePictureStreaming(position <= 1);
+                mEncodingConfigFragment.enableAudioOnly(position == 1);
+                mEncodingConfigFragment.enableWatermark(position == 0);
+                mEncodingConfigFragment.enablePictureStreaming(position == 0);
                 // Import & Screen streaming must specify custom video encoding size
-                mEncodingConfigFragment.forceCustomVideoEncodingSize(position == 3 || position == 4);
+                mEncodingConfigFragment.forceCustomVideoEncodingSize(position == 2 || position == 3);
 
                 View cameraConfigPanel = findViewById(R.id.camera_config_panel);
-                cameraConfigPanel.setVisibility(position <= 1 ? View.VISIBLE : View.GONE);
+                cameraConfigPanel.setVisibility(position == 0 ? View.VISIBLE : View.GONE);
             }
 
             @Override
@@ -226,7 +223,7 @@ public class MainActivity extends FragmentActivity {
      * @return the publish URL
      */
     private String genPublishURL() {
-        String publishUrl = Utils.requestPublishUrl(ROOM_NUMBER);
+        String publishUrl = Util.syncRequest(GENERATE_STREAM_TEXT + UUID.randomUUID());
         if (publishUrl == null) {
             Util.showToast(MainActivity.this, "Get publish GENERATE_STREAM_TEXT failed !!!");
             return null;
@@ -240,6 +237,6 @@ public class MainActivity extends FragmentActivity {
                 e.printStackTrace();
             }
         }
-        return publishUrl;
+        return "rtmp://pili-publish.qnsdk.com/sdk-live/test_pili";
     }
 }

@@ -5,6 +5,7 @@ package com.bytedance.labcv.demo;
 import android.content.Context;
 import android.graphics.ImageFormat;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
@@ -19,8 +20,9 @@ import java.util.List;
 
 /**
  * 相机管理类
- *
+ * Camera management class
  */
+@Deprecated
 public class CameraDevice {
     public static final int RETRY_OPEN_CAMERA = 3;
     private static CameraDevice mCameraDevice = new CameraDevice();
@@ -105,6 +107,7 @@ public class CameraDevice {
 
     /**
      * 必须先调用prepareSurfaceTexture
+     * must call prepareSurfaceTexture first
      */
     public void startPreview(SurfaceTexture surfaceTexture, Camera.PreviewCallback previewCallback) {
         try {
@@ -132,6 +135,7 @@ public class CameraDevice {
 
     /**
      * 必须先调用prepareSurfaceTexture
+     * must call prepareSurfaceTexture first
      */
     public void startPreview(SurfaceTexture surfaceTexture) {
         startPreview(surfaceTexture, null);
@@ -150,6 +154,7 @@ public class CameraDevice {
 
     /**
      * 竖屏
+     * Vertical screen
      */
     public int getPreviewWidth() {
         Camera.Size size = getPreviewSize();
@@ -163,6 +168,7 @@ public class CameraDevice {
 
     /**
      * 必须之后调用deleteSurfaceTexture
+     * must call deleteSurfaceTexture later
      */
     public void closeCamera() {
         if (mCamera != null) {
@@ -230,43 +236,43 @@ public class CameraDevice {
         Point size480p = new Point(640, 480);
         Point size1080p = new Point(1920, 1080);
 
-        if (mCamera != null) {
-            List<Camera.Size> sizes = mCamera.getParameters().getSupportedPreviewSizes();
-            for (Camera.Size s : sizes) {
-                if (AppUtils.isDebug()) {
-                    if (null == mainActivity.cameraInfo) {
-                        mainActivity.cameraInfo = new StringBuilder();
-                    }
-                    mainActivity.cameraInfo.append("s.width ="+s.width + " s.height = "+s.height + "||");
-                }
-
-                if ((s.width == size720p.x) && (s.height == size720p.y)) {
-                    mSupprot720p = true;
-                } else if ((s.width == size480p.x) && (s.height == size480p.y)) {
-                    mSupprot480p = true;
-                } else if ((s.width == size1080p.x) && (s.height == size1080p.y)) {
-
-                }
-            }
-
-            if (AppUtils.isDebug()) {
-                mainActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mainActivity.tvcameraInfo.setText(mainActivity.cameraInfo.toString());
-                    }
-                });
-            }
-
-
-            if (mSupprot720p) {
-                return size720p;
-            } else if (mSupprot480p) {
-                return size480p;
-            } else {
-                return new Point(sizes.get(0).width, sizes.get(0).height);
-            }
-        }
+//        if (mCamera != null) {
+//            List<Camera.Size> sizes = mCamera.getParameters().getSupportedPreviewSizes();
+//            for (Camera.Size s : sizes) {
+//                if (AppUtils.isDebug()) {
+//                    if (null == mainActivity.cameraInfo) {
+//                        mainActivity.cameraInfo = new StringBuilder();
+//                    }
+//                    mainActivity.cameraInfo.append("s.width ="+s.width + " s.height = "+s.height + "||");
+//                }
+//
+//                if ((s.width == size720p.x) && (s.height == size720p.y)) {
+//                    mSupprot720p = true;
+//                } else if ((s.width == size480p.x) && (s.height == size480p.y)) {
+//                    mSupprot480p = true;
+//                } else if ((s.width == size1080p.x) && (s.height == size1080p.y)) {
+//
+//                }
+//            }
+//
+//            if (AppUtils.isDebug()) {
+//                mainActivity.runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        mainActivity.tvcameraInfo.setText(mainActivity.cameraInfo.toString());
+//                    }
+//                });
+//            }
+//
+//
+//            if (mSupprot720p) {
+//                return size720p;
+//            } else if (mSupprot480p) {
+//                return size480p;
+//            } else {
+//                return new Point(sizes.get(0).width, sizes.get(0).height);
+//            }
+//        }
         return null;
     }
 

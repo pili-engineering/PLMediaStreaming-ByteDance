@@ -5,11 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bytedance.labcv.demo.MainActivity;
+import com.qiniu.pili.droid.streaming.demo.R;
+import com.bytedance.labcv.demo.fragment.EffectFragment;
 import com.bytedance.labcv.demo.model.ButtonItem;
 import com.bytedance.labcv.demo.utils.CommonUtils;
 import com.bytedance.labcv.demo.utils.ToasUtils;
 import com.bytedance.labcv.demo.view.ButtonView;
-import com.qiniu.pili.droid.streaming.demo.R;
 
 import java.util.HashSet;
 import java.util.List;
@@ -19,6 +21,7 @@ import java.util.Set;
 public class ButtonViewRVAdapter extends SelectRVAdapter<ButtonViewRVAdapter.ViewHolder> {
     private List<ButtonItem> mItemList;
     private OnItemClickListener mListener;
+    private MainActivity.ICheckAvailableCallback mCheckAvailableCallback;
 
     private Set<Integer> mPointOnItems;
 
@@ -59,6 +62,10 @@ public class ButtonViewRVAdapter extends SelectRVAdapter<ButtonViewRVAdapter.Vie
                     ToasUtils.show("too fast click");
                     return;
                 }
+                if (mCheckAvailableCallback != null &&
+                        !mCheckAvailableCallback.checkAvailable(item.getNode().getId())) {
+                    return;
+                }
                 setSelect(position);
                 mListener.onItemClick(item);
             }
@@ -87,6 +94,33 @@ public class ButtonViewRVAdapter extends SelectRVAdapter<ButtonViewRVAdapter.Vie
                 (progress == 0 && mPointOnItems.remove(mSelect)))) { // Need to hide points and show points before 需要隐藏点并且之前显示点
             notifyItemChanged(mSelect);
         }
+    }
+
+    public void onProgress(float progress, int id) {
+        for (int i = 0; i < mItemList.size(); i++) {
+            if (mItemList.get(i).getNode().getId() == id) {
+                if (
+                        (progress > 0 && mPointOnItems.add(i))
+                        || (progress == 0 && mPointOnItems.remove(i))
+                ) {
+                    notifyItemChanged(i);
+                }
+            }
+        }
+    }
+
+    public void setSelectItem(int id) {
+        for (int i = 0; i < mItemList.size(); i++) {
+            if (mItemList.get(i).getNode().getId() == id) {
+                setSelect(i);
+                return;
+            }
+        }
+        setSelect(-1);
+    }
+
+    public void setCheckAvailableCallback(MainActivity.ICheckAvailableCallback callback) {
+        mCheckAvailableCallback = callback;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

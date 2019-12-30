@@ -8,16 +8,20 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bytedance.labcv.demo.MainActivity;
+import com.qiniu.pili.droid.streaming.demo.R;
 import com.bytedance.labcv.demo.model.StickerItem;
 import com.bytedance.labcv.demo.utils.CommonUtils;
 import com.bytedance.labcv.demo.utils.ToasUtils;
-import com.qiniu.pili.droid.streaming.demo.R;
 
 import java.util.List;
+
+import static com.bytedance.labcv.demo.contract.StickerContract.TYPE_STICKER;
 
 public class StickerRVAdapter extends SelectRVAdapter<StickerRVAdapter.ViewHolder> {
     private List<StickerItem> mStickerList;
     private OnItemClickListener mListener;
+    private MainActivity.ICheckAvailableCallback mCheckAvailableCallback;
 
     public StickerRVAdapter(List<StickerItem> stickers, OnItemClickListener listener) {
         mStickerList = stickers;
@@ -49,12 +53,31 @@ public class StickerRVAdapter extends SelectRVAdapter<StickerRVAdapter.ViewHolde
                     ToasUtils.show("too fast click");
                     return;
                 }
+                if (mCheckAvailableCallback != null &&
+                        !mCheckAvailableCallback.checkAvailable(TYPE_STICKER)) {
+                    return;
+                }
                 if (mSelect != position) {
                     mListener.onItemClick(item);
                     setSelect(position);
                 }
             }
         });
+    }
+
+    public void setSelectItem(String sticker) {
+        for (int i = 0; i < mStickerList.size(); i++) {
+            StickerItem item = mStickerList.get(i);
+            if (sticker.equals(item.getResource())) {
+                setSelect(i);
+                return;
+            }
+        }
+        setSelect(0);
+    }
+
+    public void setCheckAvailableCallback(MainActivity.ICheckAvailableCallback callback) {
+        mCheckAvailableCallback = callback;
     }
 
     @Override

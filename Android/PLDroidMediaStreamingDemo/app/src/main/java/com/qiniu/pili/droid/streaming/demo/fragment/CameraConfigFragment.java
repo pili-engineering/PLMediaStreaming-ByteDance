@@ -69,8 +69,8 @@ public class CameraConfigFragment extends ConfigFragment {
         cameraConfig.mSizeRatio = PREVIEW_SIZE_RATIO_PRESETS_MAPPING[sizeRatioSpinner.getSelectedItemPosition()];
         Spinner focusModeSpinner = (Spinner) root.findViewById(R.id.focus_mode_spinner);
         cameraConfig.mFocusMode = FOCUS_MODE_PRESETS_MAPPING[focusModeSpinner.getSelectedItemPosition()];
-        cameraConfig.mIsFaceBeautyEnabled = ((CheckBox) root.findViewById(R.id.face_beauty)).isChecked();
-        cameraConfig.mIsCustomFaceBeauty = ((CheckBox) root.findViewById(R.id.external_face_beauty)).isChecked();
+        cameraConfig.mIsFaceBeautyEnabled = false;
+        cameraConfig.mIsCustomFaceBeauty = true;
         cameraConfig.mContinuousAutoFocus = ((CheckBox) root.findViewById(R.id.continuous_auto_focus)).isChecked();
         cameraConfig.mPreviewMirror = ((CheckBox) root.findViewById(R.id.preview_mirror)).isChecked();
         cameraConfig.mEncodingMirror = ((CheckBox) root.findViewById(R.id.encoding_mirror)).isChecked();
